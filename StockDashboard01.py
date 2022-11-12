@@ -53,7 +53,7 @@ st.markdown(f"### {selected_stock}")
 
 df = fdr.DataReader(tick_code, '2022')
 df = ssl.get_indicator(df)
-st.write(df['SMA5'].iloc[-1])
+st.write(df['Close'].iloc[-1])
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
@@ -98,9 +98,9 @@ for i in range(len(Sell)):
 st.plotly_chart(fig)
 # RSI
 fig = df['RSI'].iplot(asFigure=True, xTitle="The X Axis",
-                        yTitle="The Y Axis", title="RSI")
-fig.add_hline(y=30, line=dict(width=1, color='pink', dash='dash'))
-fig.add_hline(y=70, line=dict(width=1, color='cyan', dash='dash'))
+                        yTitle="The Y Axis", title="RSI", theme='solar')
+fig.add_hline(y=30, line=dict(width=2, color='pink', dash='dash'))
+fig.add_hline(y=70, line=dict(width=2, color='cyan', dash='dash'))
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
 for i in range(len(Sell)):

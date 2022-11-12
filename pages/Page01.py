@@ -23,17 +23,16 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 
 df_stocklist_100 = pd.DataFrame()
 # 새로 잃어올때만 실행
-# df = fdr.StockListing('NASDAQ')
-# df.to_csv('stocklist_nasdaq.csv')
-df = pd.read_csv('stocklist_nasdaq.csv')
+# df = fdr.StockListing('KOSPI')
+# df.to_csv('stocklist_kospi.csv')
+df = pd.read_csv('stocklist_kospi.csv')
 
 df_stocklist_100['index'] = df[0:200].index
-df_stocklist_100['Symbol'] = df[0:200]['Symbol']
+df_stocklist_100['Code'] = df[0:200]['Code']
 df_stocklist_100['Name'] = df[0:200]['Name']
 # st.dataframe(df)
 
-
-st.sidebar.markdown("## NASDAQ")
+st.sidebar.markdown("## KOSPI")
 col1, col2 = st.sidebar.columns([9, 1])
 with col1:
     # ------------------- 매수 종목  리스트 AgGrid
@@ -46,14 +45,15 @@ with col1:
                         allow_unsafe_jscode=True)
     sel_row = grid_table["selected_rows"]
     # stock_index = sel_row[0]['StockIndex']        # 필요 없지만 예비로 남겨줌
-    tick_code = sel_row[0]['Symbol']
+    tick_code = sel_row[0]['Code']
     tick_name = sel_row[0]['Name']
-    selected_stock = f"{tick_code} -- {tick_name}"
+    selected_stock = f"[{tick_code}] {tick_name}"
 st.markdown(f"### {selected_stock}")
 # -------------------------------------------------
 
 df = fdr.DataReader(tick_code, '2022')
 df = ssl.get_indicator(df)
+st.write(df['Close'].iloc[-1])
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
@@ -98,9 +98,9 @@ for i in range(len(Sell)):
 st.plotly_chart(fig)
 # RSI
 fig = df['RSI'].iplot(asFigure=True, xTitle="The X Axis",
-                        yTitle="The Y Axis", title="RSI")
-fig.add_hline(y=30, line=dict(width=1, color='pink', dash='dash'))
-fig.add_hline(y=70, line=dict(width=1, color='cyan', dash='dash'))
+                        yTitle="The Y Axis", title="RSI", theme='solar')
+fig.add_hline(y=30, line=dict(width=2, color='pink', dash='dash'))
+fig.add_hline(y=70, line=dict(width=2, color='cyan', dash='dash'))
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
 for i in range(len(Sell)):

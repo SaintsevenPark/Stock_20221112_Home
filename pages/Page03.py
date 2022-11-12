@@ -32,7 +32,7 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 # df_stocklist_100['Symbol'] = df[0:200]['Symbol']
 # df_stocklist_100['Name'] = df[0:200]['Name']
 # # st.dataframe(df)
-stock_list = ['AAPL', 'JNJ', 'U']
+stock_list = ['AAPL', 'JNJ', 'U', 'DIS', 'GM', 'WMT', 'AMZN', 'GOOGL', 'LMT', 'NFLX', 'TSLA', 'KO']
 select_stock =  st.selectbox('Select Stock', stock_list)
 
 st.sidebar.markdown("## NASDAQ")
