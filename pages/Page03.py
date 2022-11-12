@@ -21,39 +21,26 @@ from saintsevenlib import saintsevenstrategy as sst
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 
-df_stocklist_100 = pd.DataFrame()
-# 새로 잃어올때만 실행
-# df = fdr.StockListing('KRX')
-# df.to_csv('stocklist_krx.csv')
-df = pd.read_csv('stocklist_krx.csv')
+# df_stocklist_100 = pd.DataFrame()
+# # 새로 잃어올때만 실행
+# # df = fdr.StockListing('NASDAQ')
+# # df.to_csv('stocklist_nasdaq.csv')
+# # df = pd.read_csv('stocklist_usr_us.csv')
+#
+#
+# df_stocklist_100['index'] = df[0:200].index
+# df_stocklist_100['Symbol'] = df[0:200]['Symbol']
+# df_stocklist_100['Name'] = df[0:200]['Name']
+# # st.dataframe(df)
+stock_list = ['AAPL', 'JNJ', 'U']
+select_stock =  st.selectbox('Select Stock', stock_list)
 
-df_stocklist_100['index'] = df[0:200].index
-df_stocklist_100['Code'] = df[0:200]['Code']
-df_stocklist_100['Name'] = df[0:200]['Name']
-# st.dataframe(df)
-
-st.sidebar.markdown("## KOSPI")
-col1, col2 = st.sidebar.columns([9, 1])
-with col1:
-    # ------------------- 매수 종목  리스트 AgGrid
-    gd = GridOptionsBuilder.from_dataframe(df_stocklist_100)
-    gd.configure_selection(selection_mode='sel_mode', use_checkbox=True)
-    gridoptions = gd.build()
-    grid_table = AgGrid(df_stocklist_100,
-                        gridOptions=gridoptions,
-                        update_mode=GridUpdateMode.SELECTION_CHANGED,
-                        allow_unsafe_jscode=True)
-    sel_row = grid_table["selected_rows"]
-    # stock_index = sel_row[0]['StockIndex']        # 필요 없지만 예비로 남겨줌
-    tick_code = sel_row[0]['Code']
-    tick_name = sel_row[0]['Name']
-    selected_stock = f"[{tick_code}] {tick_name}"
-st.markdown(f"### {selected_stock}")
+st.sidebar.markdown("## NASDAQ")
+st.markdown(f"### {select_stock}")
 # -------------------------------------------------
 
-df = fdr.DataReader(tick_code, '2022')
+df = fdr.DataReader(select_stock, '2022')
 df = ssl.get_indicator(df)
-st.write(df['SMA5'].iloc[-1])
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
@@ -61,7 +48,6 @@ st.write(df['SMA5'].iloc[-1])
 # Buy, Sell, superBuy, superSell = sst.strategy01(df)
 # 5 이평선이 20 이평선을 돌파 할때
 Buy, Sell, superBuy, superSell = sst.strategy03(df)
-st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
 
 
 # ----------------------------------

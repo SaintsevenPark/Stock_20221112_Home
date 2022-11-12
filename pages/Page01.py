@@ -61,6 +61,7 @@ df = ssl.get_indicator(df)
 # Buy, Sell, superBuy, superSell = sst.strategy01(df)
 # 5 이평선이 20 이평선을 돌파 할때
 Buy, Sell, superBuy, superSell = sst.strategy03(df)
+st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
 
 
 # ----------------------------------
