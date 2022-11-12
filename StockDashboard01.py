@@ -32,7 +32,7 @@ df_stocklist_100['Code'] = df[0:200]['Code']
 df_stocklist_100['Name'] = df[0:200]['Name']
 # st.dataframe(df)
 
-
+st.sidebar.markdown("## KOSPI")
 col1, col2 = st.sidebar.columns([9, 1])
 with col1:
     # ------------------- 매수 종목  리스트 AgGrid
