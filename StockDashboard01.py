@@ -1,18 +1,18 @@
 import pandas as pd
 import streamlit as st
 import FinanceDataReader as fdr
-import matplotlib.pyplot as plt
-import time
-import numpy as np
-import cufflinks as cf
-# # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
-# # import plotly.offline as plyo
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import pandas_ta as pt
+# import matplotlib.pyplot as plt
+# import time
+# import numpy as np
+# import cufflinks as cf
+# # # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
+# import plotly.offline as plyo
+# import plotly.graph_objects as go
+# from plotly.subplots import make_subplots
+# import pandas_ta as pt
 from st_aggrid import AgGrid, GridUpdateMode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
-
+#
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
@@ -60,8 +60,16 @@ st.write(df['Close'].iloc[-1])
 # 5 이평선이 20 이평선 아래에서 V 자 반등 할고 rsi가 우상 mfi가 우상
 # Buy, Sell, superBuy, superSell = sst.strategy01(df)
 # 5 이평선이 20 이평선을 돌파 할때
-Buy, Sell, superBuy, superSell = sst.strategy03(df)
-st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
+# Buy, Sell, superBuy, superSell = sst.strategy03(df)
+# st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
+
+# # TRIX 가 0을 돌파할때
+# Buy, Sell, superBuy, superSell = sst.strategy07(df)
+# st.write('TRIX 가 0을 돌파할때')
+
+# TRIX 가 TRIXs 를 돌파할때
+Buy, Sell, superBuy, superSell = sst.strategy08(df)
+st.write('TRIX 가 TRIXs 를 돌파할때')
 
 
 # ----------------------------------
@@ -135,5 +143,17 @@ for i in range(len(Buy)):
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
 st.plotly_chart(fig)
+
+# TRIX
+fig = df[['TRIX', 'TRIXs']].iplot(asFigure=True, xTitle="The X Axis",
+                        yTitle="The Y Axis", title="TRIX")
+fig.add_hline(y=0, line=dict(width=2, color='pink', dash='dash'))
+for i in range(len(Buy)):
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
+for i in range(len(Sell)):
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
+st.plotly_chart(fig)
+
+
 
 

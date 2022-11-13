@@ -42,7 +42,9 @@ if st.sidebar.button("코인 검색"):
         with numbers.container():
             df = fdr.DataReader(df_stocklist['Code'].iloc[i], '2022')
             df = ssl.get_indicator(df)
-            Buy, Sell, superBuy, superSell = sst.strategy03(df)
+            # **********************************************************************
+            Buy, Sell, superBuy, superSell = sst.strategy08(df)
+            # ***********************************************************************
             if len(Buy) > 0:
                 # if Buy[-1] >= 198:
                 if Buy[-1] >= len(df)-2:
@@ -71,4 +73,3 @@ if st.sidebar.button("코인 검색"):
 st.text(buy_coin)
 st.text(buy_coin_price)
 
-# ['SK하이닉스', 'NAVER', '기아', '카카오', 'LG', '크래프톤', '두산에너빌리티', 'LG생활건강', '우리금융지주', 'SK바이오사이언스', '하이브', 'SK스퀘어', '현대건설', '맥쿼리인프라', '미래에셋증권', '카카오게임즈', '한미약품', '현대오토에버', '한국금융지주', 'NH투자증권']

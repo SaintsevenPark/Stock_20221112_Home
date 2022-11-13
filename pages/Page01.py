@@ -136,4 +136,3 @@ for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
 st.plotly_chart(fig)
 
-

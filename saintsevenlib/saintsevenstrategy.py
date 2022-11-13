@@ -142,3 +142,51 @@ def strategy03(df):
 #                 trigger = False
 #
 #     return buy, sell, superbuy, supersell
+
+# -----------------------------   전략 7 ---------------------------------------
+# trix가 0을 돌파할때
+def strategy07(df):
+    buy, sell, superbuy, supersell = [], [], [], []
+    # trigger = False
+    for i in range(2, len(df)):
+        if df['TRIX'].iloc[i] > 0 > df['TRIX'].iloc[i-1]:
+            buy.append(i)
+            # if trigger == False:
+            #     buy.append(i)
+            #     trigger = True
+        elif df['TRIX'].iloc[i] < 0 < df['TRIX'].iloc[i-1]:
+            sell.append(i)
+            # if trigger == True:
+            #     sell.append(i)
+            #     trigger = False
+        if df.SUPERTs[i-1] > df.Close.iloc[i-1] and df.SUPERTl[i] < df.Close.iloc[i]:
+            superbuy.append(i)
+        elif df.SUPERTl[i-1] < df.Close.iloc[i-1] and df.SUPERTs[i] > df.Close.iloc[i]:
+            supersell.append(i)
+
+    return buy, sell, superbuy, supersell
+
+# -----------------------------   전략 8 ---------------------------------------
+# trix가 TRIXs 을 돌파할때---------------- (0 이상 0이하 로 시도 해볼것.,)
+def strategy08(df):
+    buy, sell, superbuy, supersell = [], [], [], []
+    # trigger = False
+    for i in range(2, len(df)):
+        if df['TRIX'].iloc[i] > df['TRIXs'].iloc[i] \
+           and df['TRIX'].iloc[i-1] < df['TRIXs'].iloc[i-1]:
+            buy.append(i)
+            # if trigger == False:
+            #     buy.append(i)
+            #     trigger = True
+        elif df['TRIX'].iloc[i] < df['TRIXs'].iloc[i] \
+           and df['TRIX'].iloc[i-1] > df['TRIXs'].iloc[i-1]:
+            sell.append(i)
+            # if trigger == True:
+            #     sell.append(i)
+            #     trigger = False
+        if df.SUPERTs[i-1] > df.Close.iloc[i-1] and df.SUPERTl[i] < df.Close.iloc[i]:
+            superbuy.append(i)
+        elif df.SUPERTl[i-1] < df.Close.iloc[i-1] and df.SUPERTs[i] > df.Close.iloc[i]:
+            supersell.append(i)
+
+    return buy, sell, superbuy, supersell

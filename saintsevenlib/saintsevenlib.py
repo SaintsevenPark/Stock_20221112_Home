@@ -42,5 +42,9 @@ def get_indicator(df):
     df['SUPERTs'] = supert[f"{supert.columns[3]}"]
     # CCI
     df['CCI'] = pt.cci(df['High'], df['Low'], df['Close'], length=14)
+    # Trix 지표
+    trix = pt.trix(df['Close'], timeperiod=20)
+    df['TRIX'] = trix[f"{trix.columns[0]}"]
+    df['TRIXs'] = trix[f"{trix.columns[1]}"]
 
     return df
