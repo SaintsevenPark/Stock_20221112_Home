@@ -17,12 +17,12 @@ from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
 
-# -------------------- 페이지 형태 최기화
+# -------------------- 페이지 형태 초기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 
 df_stocklist_100 = pd.DataFrame()
-# 새로 잃어올때만 실행
+# 새로 읽어올때만 실행
 # df = fdr.StockListing('NASDAQ')
 # df.to_csv('stocklist_nasdaq.csv')
 df = pd.read_csv('stocklist_nasdaq.csv')
@@ -68,17 +68,17 @@ st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
 fig = df[['Close', 'BBL', 'BBU', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="일간 가격 변동")
 for i in range(len(Buy)):
-    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
-    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
 # 이동평균선
 fig = df[['Close', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="이동평균선 5와 20 교차")
 for i in range(len(Buy)):
-    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
-    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
 # Super Trend
 fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
