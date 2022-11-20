@@ -25,6 +25,8 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 
 stock_length = 100
 df_stocklist = pd.read_csv('stocklist_krx.csv')[0:stock_length]
+df_stocklist.drop(df_stocklist.columns[[0,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17]], axis=1, inplace=True)
+
 
 st.dataframe(df_stocklist)
 st.write(len(df_stocklist))

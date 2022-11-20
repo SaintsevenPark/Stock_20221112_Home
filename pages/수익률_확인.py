@@ -4,7 +4,7 @@ import streamlit as st
 import FinanceDataReader as fdr
 import matplotlib.pyplot as plt
 import time
-import datetime
+from datetime import date, timedelta
 import numpy as np
 import cufflinks as cf
 # # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
@@ -19,8 +19,10 @@ sys.path.append('E:/MyProject/PyCharm_Project/StockProject01/StockDashboard01/sa
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
+start_date = '2022-11'
 
-upload_file = st.file_uploader("CSV 선택")
+# ------------------------ Nasdaq
+upload_file = st.file_uploader("NASDAQ CSV 선택")
 st.text(upload_file)
 
 if upload_file:
@@ -30,7 +32,29 @@ if upload_file:
     # Current price 확인
     current_price = []
     for i in range(len(df)):
-        df_current = fdr.DataReader(df['Symbol'].iloc[i], '2022-11')
+        df_current = fdr.DataReader(df['Symbol'].iloc[i], start_date)
+        current_price.append(df_current['Close'].iloc[-1])
+        time.sleep(0.3)
+
+    df['현재가'] = current_price
+    df['차액'] = df['현재가'] - df['Price']
+    df['수익률'] = (df['차액'] / df['Price']) * 100
+
+    st.dataframe(df)
+
+
+# ------------------------ KRX
+upload_file = st.file_uploader("KRX CSV 선택")
+st.text(upload_file)
+
+if upload_file:
+    df = pd.read_csv(upload_file)
+    df.drop(df.columns[0], axis=1, inplace=True)
+
+    # Current price 확인
+    current_price = []
+    for i in range(len(df)):
+        df_current = fdr.DataReader(df['Name'].iloc[i], start_date)
         current_price.append(df_current['Close'].iloc[-1])
         time.sleep(0.3)
 
