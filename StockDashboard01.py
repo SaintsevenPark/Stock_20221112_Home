@@ -20,7 +20,7 @@ from saintsevenlib import saintsevenstrategy as sst
 # -------------------- 페이지 형태 최기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
-st.markdown("### 테스트 페이지")
+# st.markdown("### 테스트 페이지")
 # 변수초기화
 stock_count = 100
 
@@ -46,8 +46,14 @@ df['SUPERTpp2'] = ((df['SUPERT'] - df['Close']) / df['Close']) * 100
 # st.dataframe(df)
 
 #   작전 선택
-Buy, Sell, superBuy, superSell, desc = sst.strategy09(df)
-st.write(desc)
+l_line = 2
+s_line = -10
+Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown(f"### {df_stocklist['Name'].iloc[number]}  | 현재가 : {df['Close'].iloc[-1]}")
+with col2:
+    st.write(desc)
 
 # 시각화 시작
 fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
@@ -65,6 +71,6 @@ for i in range(len(Buy)):
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 
-fig.add_hline(y=2, line=dict(width=1, color='pink', dash='dash'))
-fig.add_hline(y=-10, line=dict(width=1, color='blue', dash='dash'))
+fig.add_hline(y=s_line, line=dict(width=1, color='green', dash='dash'))
+fig.add_hline(y=l_line, line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
