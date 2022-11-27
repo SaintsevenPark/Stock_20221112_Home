@@ -12,6 +12,8 @@ import FinanceDataReader as fdr
 # import pandas_ta as pt
 from st_aggrid import AgGrid, GridUpdateMode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+
+from plotly.subplots import make_subplots
 #
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
@@ -40,8 +42,6 @@ number = st.number_input('Insert a number', min_value=0, max_value=stock_count)
 tick_code = df_stocklist['Code'].iloc[number]
 df = fdr.DataReader(tick_code, '2022')
 df = ssl.get_indicator(df)
-df['SUPERTpp1'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
-df['SUPERTpp2'] = ((df['SUPERT'] - df['Close']) / df['Close']) * 100
 
 # st.dataframe(df)
 
@@ -56,7 +56,9 @@ with col2:
     st.write(desc)
 
 # 시각화 시작
-fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
+df['SUPERTl2'] = df['SUPERTl'] * (1 + (l_line / 100))
+df['SUPERTs2'] = df['SUPERTs'] * (1 + (s_line / 100))
+fig = df[['Close', 'SUPERTl', 'SUPERTl2', 'SUPERTs', 'SUPERTs2']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="Super Trend")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
@@ -64,7 +66,7 @@ for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
 
-fig = df['SUPERTpp1'].iplot(asFigure=True, xTitle="The X Axis",
+fig = df['SUPERTp'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="Super Trend의 편차")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
@@ -74,3 +76,4 @@ for i in range(len(Sell)):
 fig.add_hline(y=s_line, line=dict(width=1, color='green', dash='dash'))
 fig.add_hline(y=l_line, line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
+

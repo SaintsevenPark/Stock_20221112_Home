@@ -30,6 +30,7 @@ strategy_names_to_funcs = {
     "Strategy 6": sst.strategy06,
     "Strategy 7": sst.strategy07,
     "Strategy 8": sst.strategy08,
+    "Strategy 9": sst.strategy09,
 }
 
 df_stocklist_100 = pd.DataFrame()
@@ -72,25 +73,17 @@ st.write(df['Close'].iloc[-1])
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
-# st.write('5 이평선이 20 이평선 아래에서 V 자 반등 할고 rsi가 우상 mfi가 우상')
-Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-st.write(desc)
-
-# 5 이평선이 20 이평선을 돌파 할때
-# Buy, Sell, superBuy, superSell = sst.strategy03(df)
-# st.write('전략3 : 5 이평선이 20 이평선을 돌파 할때')
-
-# # TRIX 가 0을 돌파할때
-# Buy, Sell, superBuy, superSell = sst.strategy07(df)
-# st.write('TRIX 가 0을 돌파할때')
-
-# TRIX 가 TRIXs 를 돌파할때
-# Buy, Sell, superBuy, superSell = sst.strategy08(df)
-# st.write('TRIX 가 TRIXs 를 돌파할때')
-
+if selected_strategy == 'Strategy 9':
+    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
+    st.write(desc)
+else:
+    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+    st.write(desc)
 
 # ----------------------------------
-fig = df[['Close', 'BBL', 'BBU', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
+# fig = df[['Close', 'BBL', 'BBU', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
+#                         yTitle="The Y Axis", title="일간 가격 변동")
+fig = df['Close'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="일간 가격 변동")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))

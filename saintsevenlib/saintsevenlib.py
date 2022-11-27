@@ -40,6 +40,13 @@ def get_indicator(df):
     df['SUPERTd'] = supert[f"{supert.columns[1]}"]
     df['SUPERTl'] = supert[f"{supert.columns[2]}"]
     df['SUPERTs'] = supert[f"{supert.columns[3]}"]
+    df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
+    # # SuperTrend 20
+    # supert20 = pt.supertrend(df['High'], df['Low'], df['Close'], length=20, multiplier=5.0)
+    # df['SUPERT20'] = supert20[f"{supert20.columns[0]}"]
+    # df['SUPERTd20'] = supert20[f"{supert20.columns[1]}"]
+    # df['SUPERTl20'] = supert20[f"{supert20.columns[2]}"]
+    # df['SUPERTs20'] = supert20[f"{supert20.columns[3]}"]
     # CCI
     df['CCI'] = pt.cci(df['High'], df['Low'], df['Close'], length=14)
     # Trix 지표

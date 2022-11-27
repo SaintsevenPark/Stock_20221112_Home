@@ -31,6 +31,7 @@ strategy_names_to_funcs = {
     "Strategy 6": sst.strategy06,
     "Strategy 7": sst.strategy07,
     "Strategy 8": sst.strategy08,
+    "Strategy 9": sst.strategy09,
 }
 
 df_stocklist_100 = pd.DataFrame()
@@ -70,15 +71,17 @@ df = ssl.get_indicator(df)
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
-# 5 이평선이 20 이평선 아래에서 V 자 반등 할고 rsi가 우상 mfi가 우상
-# Buy, Sell, superBuy, superSell = sst.strategy01(df)
-# 5 이평선이 20 이평선을 돌파 할때
-Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-st.write(desc)
-
+if selected_strategy == 'Strategy 9':
+    l_line = 2
+    s_line = -10
+    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, l_line, s_line)
+    st.write(desc)
+else:
+    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+    st.write(desc)
 
 # ----------------------------------
-fig = df[['Close', 'BBL', 'BBU', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
+fig = df['Close'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="일간 가격 변동")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
