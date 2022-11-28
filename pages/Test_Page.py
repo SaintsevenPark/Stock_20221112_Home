@@ -115,9 +115,9 @@ with tab1:
 
     # ---------------------- 마킹
     for i in range(len(Buy)):
-        fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=3, color='pink', dash='dash'))
+        fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='orange', dash='dash'))
     for i in range(len(Sell)):
-        fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=3, color='blue', dash='dash'))
+        fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 
     fig.add_hline(y=l_line, line_width=1, line_dash="dash", line_color="red", row=2, col=1)
     fig.add_hline(y=s_line, line_width=1, line_dash="dash", line_color="green", row=2, col=1)

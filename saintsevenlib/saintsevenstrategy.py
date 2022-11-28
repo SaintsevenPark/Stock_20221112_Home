@@ -230,13 +230,12 @@ def strategy09(df, l_line, s_line):
         if df['SUPERTd'].iloc[i] > 0:
             if df['SUPERTp'].iloc[i] > l_line > df['SUPERTp'].iloc[i-1]:
                 buy.append(i)
+            if df['SUPERTp'].iloc[i] < (l_line * 6) < df['SUPERTp'].iloc[i-1]:
+                sell.append(i)
         elif df['SUPERTd'].iloc[i] < 0:
             if df['SUPERTp'].iloc[i] > s_line > df['SUPERTp'].iloc[i - 1] \
                 and df['SUPERTs'].iloc[i] == df['SUPERTs'].iloc[i - 1]  == df['SUPERTs'].iloc[i - 2]:
                 buy.append(i)
-            # elif df['TRIX'].iloc[i] < df['TRIXs'].iloc[i] \
-            #    and df['TRIX'].iloc[i-1] > df['TRIXs'].iloc[i-1]:
-            #     sell.append(i)
 
     desc = f'SuperT 지표이용,  SUPERTl(1)구간일때 종가가 `{l_line}`을 우상향 SUPERs(-1)구간일때 종가가 `{s_line}`을 우상향할때 매수'
 
