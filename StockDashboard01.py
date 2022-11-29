@@ -22,6 +22,9 @@ from saintsevenlib import saintsevenstrategy as sst
 # -------------------- 페이지 형태 최기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
+st.markdown("https://medium.com/codex/step-by-step-implementation-of-the-supertrend-indicator-in-python-656aa678c111")
+st.markdown("https://www.youtube.com/watch?v=u1b5v2Is8iY")
+
 # st.markdown("### 테스트 페이지")
 # 변수초기화
 stock_count = 100
@@ -60,6 +63,14 @@ df['SUPERTl2'] = df['SUPERTl'] * (1 + (l_line / 100))
 df['SUPERTs2'] = df['SUPERTs'] * (1 + (s_line / 100))
 fig = df[['Close', 'SUPERTl', 'SUPERTl2', 'SUPERTs', 'SUPERTs2']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="Super Trend")
+for i in range(len(Buy)):
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
+for i in range(len(Sell)):
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
+st.plotly_chart(fig)
+
+fig = df[['STOCHRSIk', 'STOCHRSId']].iplot(asFigure=True, xTitle="The X Axis",
+                        yTitle="The Y Axis", title="Stochastic RSI")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):

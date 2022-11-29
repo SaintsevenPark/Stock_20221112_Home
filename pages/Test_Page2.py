@@ -60,16 +60,30 @@ with tab1:
     Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
 
     # -----------------------------Matplotlib Start ----------------
-    # # plt.figure(figsize=(9, 7))
-    # fig, ax = plt.subplots(2, 1)
-    # ax[0] = df['Close'].plot(linewidth=0.5)
-    # ax[1] = df['SUPERTl'].plot(linewidth=0.5)
-    # # ax[0][1] = df['SUPERTs'].plot(linewidth=0.5)
-    #
-    #
-    # st.pyplot(fig=fig, clear_figure=None)
+    plt.figure(figsize=(30, 10), dpi=80)
+    plt.style.use('fivethirtyeight')
 
+    fig, ax = plt.subplots()
+    ax = df['Close'].plot(linewidth=2)
+    ax = df['EMA200'].plot(linewidth=2)
+    ax = df['SUPERTl10'].plot(linewidth=2)
+    ax = df['SUPERTs10'].plot(linewidth=2)
+    ax = df['SUPERTl11'].plot(linewidth=2)
+    ax = df['SUPERTs11'].plot(linewidth=2)
+    # ax[0] = df['SUPERTl10'].plot(linewidth=1)
+    # ax[0] = df['SUPERTs10'].plot(linewidth=1)
+    # ax[0] = df['SUPERTl11'].plot(linewidth=1)
+    # ax[0] = df['SUPERTs11'].plot(linewidth=1)
+    # ax[0] = df['SUPERTl12'].plot(linewidth=1)
+    # ax[0] = df['SUPERTs12'].plot(linewidth=1)
 
-    st.line_chart(df[['Close', 'SUPERTl', 'SUPERTs', 'SUPERTl2', 'SUPERTs2']])
+    # df['Close'].plot(linewidth=1)
+    st.pyplot(fig=fig, clear_figure=True)
+
+    ax = df['STOCHRSIk'].plot(linewidth=1)
+    ax = df['STOCHRSId'].plot(linewidth=1)
+    st.pyplot(fig=fig, clear_figure=None)
+
+    # st.line_chart(df[['Close', 'SUPERTl', 'SUPERTs', 'SUPERTl2', 'SUPERTs2']])
 
 

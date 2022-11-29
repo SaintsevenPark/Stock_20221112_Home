@@ -59,16 +59,17 @@ with tab1:
     #   작전 선택
     l_line = 2
     s_line = -10
-    Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+    # Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+    Buy, Sell, superBuy, superSell, desc = sst.strategy10(df, l_line=l_line, s_line=s_line)
 
     # -----------------------------Plotly Start ----------------
     fig = make_subplots(
-        rows=5, cols=1,
+        rows=6, cols=1,
         # start_cell="bottom-left",  # 시작 위치를 바꿀 수 있음
         shared_xaxes= True,
         # horizontal_spacing=0.01,
-        vertical_spacing=0.02,
-        subplot_titles=("종가-SuperTrend", "%SuperTrend", "단순이동 평균") # 각 Subplot 별 subtitle 넣기
+        vertical_spacing=0.01,
+        subplot_titles=("종가-SuperTrend", "%SuperTrend", "StochasticRSI", "단순이동 평균") # 각 Subplot 별 subtitle 넣기
     )
 
     fig.add_trace(go.Line(x=df.index, y=df['Close'], line_width=1, name='Close',
@@ -99,19 +100,29 @@ with tab1:
                           ),
                   row=2, col=1)
 
+    # Stockastic RSI
+    fig.add_trace(go.Line(x=df.index, y=df['STOCHRSIk'], line_width=1, name='STOCKRSIk',
+                          legendgroup='3',
+                          ),
+                  row=3, col=1)
+    fig.add_trace(go.Line(x=df.index, y=df['STOCHRSId'], line_width=1, name='STOCKRSId',
+                          legendgroup='3',
+                          ),
+                  row=3, col=1)
+
     # 단순이동 평균선 5 - 20
     fig.add_trace(go.Line(x=df.index, y=df['SMA5'], line_width=2, name='SMA5',
-                          legendgroup ='3'), row=3, col=1)
+                          legendgroup ='4'), row=4, col=1)
     fig.add_trace(go.Line(x=df.index, y=df['SMA20'], line_width=1, name='SMA20',
-                          legendgroup ='3'), row=3, col=1)
+                          legendgroup ='4'), row=4, col=1)
 
     # RSI
     fig.add_trace(go.Line(x=df.index, y=df['RSI'], line_width=2, name='RSI',
-                          legendgroup='4'), row=4, col=1)
+                          legendgroup='5'), row=5, col=1)
 
     # MFI
     fig.add_trace(go.Line(x=df.index, y=df['MFI'], line_width=2, name='MFI',
-                          legendgroup='5'), row=5, col=1)
+                          legendgroup='6'), row=6, col=1)
 
     # ---------------------- 마킹
     for i in range(len(Buy)):
@@ -130,7 +141,7 @@ with tab1:
     fig.add_hline(y=70, line_width=1, line_dash="dash", line_color="purple", row=5, col=1)
     # fig.add_hline(y=15000, line_width=1, line_dash="dash", line_color="pink", row=1, col=1)
     fig.update_layout(height=1400, width=600,
-                      legend_tracegroupgap = 250,)
+                      legend_tracegroupgap = 130,)
 
     st.plotly_chart(fig, use_container_width = True)
 

@@ -37,6 +37,7 @@ strategy_names_to_funcs = {
     "Strategy 7": sst.strategy07,
     "Strategy 8": sst.strategy08,
     "Strategy 9": sst.strategy09,
+    "Strategy 10": sst.strategy10,
 }
 
 df_stocklist_nasdaq = pd.read_csv('stocklist_nasdaq.csv')[0:stock_length]
@@ -72,7 +73,7 @@ with tab1:
                 df = fdr.DataReader(df_stocklist_nasdaq['Symbol'].iloc[i], start_date)
                 df = ssl.get_indicator(df)
                 # ***********************************************************************
-                if selected_strategy == 'Strategy 9':
+                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10':
                     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
                     st.write(desc)
                 else:
@@ -135,7 +136,7 @@ with tab2:
                 df = fdr.DataReader(str(df_stocklist_kosdaq['Code'].iloc[i]).zfill(6), start_date)
                 df = ssl.get_indicator(df)
                 # ***********************************************************************
-                if selected_strategy == 'Strategy 9':
+                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10':
                     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
                     st.write(desc)
                 else:

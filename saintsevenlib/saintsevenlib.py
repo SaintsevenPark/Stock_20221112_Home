@@ -41,12 +41,33 @@ def get_indicator(df):
     df['SUPERTl'] = supert[f"{supert.columns[2]}"]
     df['SUPERTs'] = supert[f"{supert.columns[3]}"]
     df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
-    # # SuperTrend 20
-    # supert20 = pt.supertrend(df['High'], df['Low'], df['Close'], length=20, multiplier=5.0)
-    # df['SUPERT20'] = supert20[f"{supert20.columns[0]}"]
-    # df['SUPERTd20'] = supert20[f"{supert20.columns[1]}"]
-    # df['SUPERTl20'] = supert20[f"{supert20.columns[2]}"]
-    # df['SUPERTs20'] = supert20[f"{supert20.columns[3]}"]
+    # Triple SuperTrend 10 - 11 - 12    1 - 2 - 3
+    supert10 = pt.supertrend(df['High'], df['Low'], df['Close'], length=10, multiplier=1.0)
+    df['SUPERT10'] = supert10[f"{supert10.columns[0]}"]
+    df['SUPERTd10'] = supert10[f"{supert10.columns[1]}"]
+    df['SUPERTl10'] = supert10[f"{supert10.columns[2]}"]
+    df['SUPERTs10'] = supert10[f"{supert10.columns[3]}"]
+
+    supert11 = pt.supertrend(df['High'], df['Low'], df['Close'], length=11, multiplier=2.0)
+    df['SUPERT11'] = supert11[f"{supert11.columns[0]}"]
+    df['SUPERTd11'] = supert11[f"{supert11.columns[1]}"]
+    df['SUPERTl11'] = supert11[f"{supert11.columns[2]}"]
+    df['SUPERTs11'] = supert11[f"{supert11.columns[3]}"]
+
+    supert12 = pt.supertrend(df['High'], df['Low'], df['Close'], length=12, multiplier=3.0)
+    df['SUPERT12'] = supert12[f"{supert12.columns[0]}"]
+    df['SUPERTd12'] = supert12[f"{supert12.columns[1]}"]
+    df['SUPERTl12'] = supert12[f"{supert12.columns[2]}"]
+    df['SUPERTs12'] = supert12[f"{supert12.columns[3]}"]
+
+    # Stochastic RSI
+    stochrsi = pt.stochrsi(close=df['Close'], length=14, rsi_length=14, k=3, d=3)
+    df['STOCHRSIk'] = stochrsi[f"{stochrsi.columns[0]}"]
+    df['STOCHRSId'] = stochrsi[f"{stochrsi.columns[1]}"]
+
+    # EMA200
+    df['EMA200'] = pt.ema(close=df['Close'], length=200, offset=0)
+
     # CCI
     df['CCI'] = pt.cci(df['High'], df['Low'], df['Close'], length=14)
     # Trix 지표
