@@ -270,3 +270,26 @@ def strategy10(df, l_line, s_line):
            f'Stochastic RSI가 20이 이하에서 상승중일때 매수'
 
     return buy, sell, superbuy, supersell, desc
+
+# --------------------------------- 전략 11 -----------------------------------------
+def strategy11(df, l_line, s_line):
+    buy, sell, superbuy, supersell = [], [], [], []
+
+    # SUPERTd 가 1일때가 SUPERTl이 종가보다 아래에 있고 값이 있슴 -> l
+    # SUPERTd 가 -1일때가 SUPERTs가 종가보다 위에 있고 값이 있슴 -> s
+
+    df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
+
+    for i in range(2, len(df)):
+        if df['SUPERTd'].iloc[i] > 0:
+            if df['SUPERTp'].iloc[i] > l_line > df['SUPERTp'].iloc[i - 1]:
+                buy.append(i)
+            # if df['SUPERTp'].iloc[i] < (l_line * 6) < df['SUPERTp'].iloc[i-1]:
+            #     sell.append(i)
+        elif df['SUPERTd'].iloc[i] < 0:
+            if df['SUPERTs'].iloc[i] == df['SUPERTs'].iloc[i-1] < df['SUPERTs'].iloc[i-2] < df['SUPERTs'].iloc[i-3]:
+                buy.append(i)
+
+    desc = f'SuperT 지표이용,  SUPERTl(1)구간일때 종가가 `{l_line}`을 우상향 SUPERs(-1)구간일때 Superts 가 내려가다가 수평으로 바뀔때매수'
+
+    return buy, sell, superbuy, supersell, desc

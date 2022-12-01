@@ -31,6 +31,8 @@ strategy_names_to_funcs = {
     "Strategy 7": sst.strategy07,
     "Strategy 8": sst.strategy08,
     "Strategy 9": sst.strategy09,
+    "Strategy 10": sst.strategy10,
+    "Strategy 11": sst.strategy11,
 }
 
 df_stocklist_100 = pd.DataFrame()
@@ -73,7 +75,7 @@ st.write(df['Close'].iloc[-1])
 # st.dataframe(df.tail(10))
 
 # ====================   전략 선택 매수 마킹 ===========================
-if selected_strategy == 'Strategy 9':
+if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
     st.write(desc)
 else:
@@ -90,6 +92,17 @@ for i in range(len(Buy)):
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
+
+# STOCHASTICRSI
+fig = df[['STOCHRSIk', 'STOCHRSId']].iplot(asFigure=True, xTitle="The X Axis",
+                        yTitle="The Y Axis", title="STOCHASTIC RSI", theme='white')
+for i in range(len(Buy)):
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
+for i in range(len(Sell)):
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
+fig.add_hline(y=20, line=dict(width=1, color='red', dash='dash'))
+st.plotly_chart(fig)
+
 # 이동평균선
 fig = df[['Close', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="이동평균선 5와 20 교차")
@@ -101,10 +114,10 @@ st.plotly_chart(fig)
 # Super Trend
 fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="Super Trend", theme='space')
-for i in range(len(superBuy)):
-    fig.add_vline(x=df.iloc[superBuy].index[i], line=dict(width=2, color='red', dash='dash'))
-for i in range(len(superSell)):
-    fig.add_vline(x=df.iloc[superSell].index[i], line=dict(width=2, color='blue', dash='dash'))
+for i in range(len(Buy)):
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=2, color='red', dash='dash'))
+for i in range(len(Sell)):
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=2, color='blue', dash='dash'))
 st.plotly_chart(fig)
 # 볼린저밴드
 fig = df[['Close', 'BBL', 'BBU']].iplot(asFigure=True, xTitle="The X Axis",

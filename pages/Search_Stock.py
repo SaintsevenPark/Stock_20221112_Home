@@ -38,6 +38,7 @@ strategy_names_to_funcs = {
     "Strategy 8": sst.strategy08,
     "Strategy 9": sst.strategy09,
     "Strategy 10": sst.strategy10,
+    "Strategy 11": sst.strategy11,
 }
 
 df_stocklist_nasdaq = pd.read_csv('stocklist_nasdaq.csv')[0:stock_length]
@@ -73,7 +74,7 @@ with tab1:
                 df = fdr.DataReader(df_stocklist_nasdaq['Symbol'].iloc[i], start_date)
                 df = ssl.get_indicator(df)
                 # ***********************************************************************
-                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10':
+                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
                     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
                     st.write(desc)
                 else:
@@ -112,9 +113,10 @@ with tab1:
         df_boughtStock_file['Price'] = buy_stock_price
         now = datetime.datetime.now().strftime('%Y%m%d_%H%M_%S')
         df_boughtStock_file.to_csv(f".\\bought data\\nasdaq_{now}_{selected_strategy}.csv")
+        st.dataframe(df_boughtStock_file)
 
 
-# ------------------------------------ KOSDAQ --------------------------------------------
+# ------------------------------------ KRX --------------------------------------------
 with tab2:
     buy_stock_symbol = []
     buy_stock_name = []
@@ -126,7 +128,7 @@ with tab2:
         st.write(len(df_stocklist_kosdaq))
 
     progress_bar = st.progress(0.0)
-    if st.button("KOSDAQ에서 종목 검색"):
+    if st.button("KRX 에서 종목 검색"):
         numbers = st.sidebar.empty()
         info = st.empty()
         num_tick = 0
@@ -136,7 +138,7 @@ with tab2:
                 df = fdr.DataReader(str(df_stocklist_kosdaq['Code'].iloc[i]).zfill(6), start_date)
                 df = ssl.get_indicator(df)
                 # ***********************************************************************
-                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10':
+                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
                     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
                     st.write(desc)
                 else:
@@ -175,6 +177,7 @@ with tab2:
         df_boughtStock_file['Price'] = buy_stock_price
         now = datetime.datetime.now().strftime('%Y%m%d_%H%M_%S')
         df_boughtStock_file.to_csv(f".\\bought data\\kosdaq_{now}_{selected_strategy}.csv")
+        st.dataframe(df_boughtStock_file)
 
 
 code = '''def hello():
