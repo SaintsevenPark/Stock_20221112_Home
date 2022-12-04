@@ -22,7 +22,7 @@ from saintsevenlib import saintsevenstrategy as sst
 start_date = '2022-11'
 
 
-tab1, tab2 = st.tabs(['NASDAQ', 'KOSDAQ'])
+tab1, tab2 = st.tabs(['NASDAQ', 'KRX'])
 
 with tab1:
     # ------------------------ Nasdaq

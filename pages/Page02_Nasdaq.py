@@ -20,8 +20,10 @@ from saintsevenlib import saintsevenstrategy as sst
 # -------------------- 페이지 형태 초기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
+stock_length = 100
 start_year = '2022'
-default_strategy = 0
+default_strategy = 10
+
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
     "Strategy 2": sst.strategy02,
@@ -32,46 +34,42 @@ strategy_names_to_funcs = {
     "Strategy 7": sst.strategy07,
     "Strategy 8": sst.strategy08,
     "Strategy 9": sst.strategy09,
+    "Strategy 10": sst.strategy10,
+    "Strategy 11": sst.strategy11,
 }
 
-df_stocklist_100 = pd.DataFrame()
+df_stocklist = pd.DataFrame()
 # 새로 읽어올때만 실행
 # df = fdr.StockListing('NASDAQ')
 # df.to_csv('stocklist_nasdaq.csv')
-df = pd.read_csv('stocklist_nasdaq.csv')
+df_stocklistfile = pd.read_csv('stocklist_nasdaq.csv')
 
-df_stocklist_100['index'] = df[0:200].index
-df_stocklist_100['Symbol'] = df[0:200]['Symbol']
-df_stocklist_100['Name'] = df[0:200]['Name']
+df_stocklist['index'] = df_stocklistfile[0:stock_length].index
+df_stocklist['Symbol'] = df_stocklistfile[0:stock_length]['Symbol']
+df_stocklist['Name'] = df_stocklistfile[0:stock_length]['Name']
 # st.dataframe(df)
 
 
 st.sidebar.markdown("## NASDAQ")
 selected_strategy = st.sidebar.selectbox("전략 선택", strategy_names_to_funcs.keys(), index=default_strategy)
-col1, col2 = st.sidebar.columns([9, 1])
-with col1:
-    # ------------------- 매수 종목  리스트 AgGrid
-    gd = GridOptionsBuilder.from_dataframe(df_stocklist_100)
-    gd.configure_selection(selection_mode='sel_mode', use_checkbox=True)
-    gridoptions = gd.build()
-    grid_table = AgGrid(df_stocklist_100,
-                        gridOptions=gridoptions,
-                        update_mode=GridUpdateMode.SELECTION_CHANGED,
-                        allow_unsafe_jscode=True)
-    sel_row = grid_table["selected_rows"]
-    # stock_index = sel_row[0]['StockIndex']        # 필요 없지만 예비로 남겨줌
-    tick_code = sel_row[0]['Symbol']
-    tick_name = sel_row[0]['Name']
-    selected_stock = f"{tick_code} -- {tick_name}"
-st.markdown(f"### {selected_stock}")
-# -------------------------------------------------
 
-df = fdr.DataReader(tick_code, start_year)
+
+number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock_length)
+
+tick_code = df_stocklist['Symbol'].iloc[number]
+df = fdr.DataReader(tick_code, start=start_year)
 df = ssl.get_indicator(df)
-# st.dataframe(df.tail(10))
+stock_code = df_stocklist['Symbol'].iloc[number]
+stock_name = df_stocklist['Name'].iloc[number]
+stock_price = df['Close'].iloc[-1]
+
+st.sidebar.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
+with st.sidebar.expander("주식 목록"):
+    st.dataframe(df_stocklist)
+
 
 # ====================   전략 선택 매수 마킹 ===========================
-if selected_strategy == 'Strategy 9':
+if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
     l_line = 2
     s_line = -10
     Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, l_line, s_line)
@@ -81,13 +79,24 @@ else:
     st.write(desc)
 
 # ----------------------------------
-fig = df['Close'].iplot(asFigure=True, xTitle="The X Axis",
+fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="일간 가격 변동")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 st.plotly_chart(fig)
+
+# STOCHASTICRSI
+fig = df[['STOCHRSIk', 'STOCHRSId']].iplot(asFigure=True, xTitle="The X Axis",
+                        yTitle="The Y Axis", title="STOCHASTIC RSI", theme='white')
+for i in range(len(Buy)):
+    fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
+for i in range(len(Sell)):
+    fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
+fig.add_hline(y=20, line=dict(width=1, color='red', dash='dash'))
+st.plotly_chart(fig)
+
 # 이동평균선
 fig = df[['Close', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="이동평균선 5와 20 교차")

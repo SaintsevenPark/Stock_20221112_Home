@@ -1,4 +1,5 @@
 import pandas as pd
+import configparser
 import streamlit as st
 import FinanceDataReader as fdr
 # import matplotlib.pyplot as plt
@@ -18,6 +19,13 @@ import pandas_ta as pt
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
+
+# --------------------- 설정 파일 작성
+# config = configparser.ConfigParser()
+# config['DefaultStrategy'] = {}                # 섹션을 생성한다
+# config['DefaultStrategy']['DefaultStrategy'] = '8'      # 섹션 아래 실제 값을 생성한다
+# with open('.\\config data\\config.ini', 'w') as configfile:
+#     config.write(configfile)
 
 # -------------------- 페이지 형태 최기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)

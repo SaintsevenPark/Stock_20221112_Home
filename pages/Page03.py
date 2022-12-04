@@ -47,7 +47,7 @@ df = ssl.get_indicator(df)
 # 5 이평선이 20 이평선 아래에서 V 자 반등 할고 rsi가 우상 mfi가 우상
 # Buy, Sell, superBuy, superSell = sst.strategy01(df)
 # 5 이평선이 20 이평선을 돌파 할때
-Buy, Sell, superBuy, superSell = sst.strategy03(df)
+Buy, Sell, superBuy, superSell, desc = sst.strategy03(df)
 
 
 # ----------------------------------

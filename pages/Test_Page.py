@@ -81,7 +81,7 @@ with tab1:
                           # fill='tonexty',
                           ),
                   row=1, col=1)
-    fig.add_trace(go.Line(x=df.index, y=df['SUPERTl'] * (1 + (l_line / 100)), line_width=0.5, name='SUPERl_2',
+    fig.add_trace(go.Line(x=df.index, y=df['SUPERTl'] * (1 + (l_line / 100)), line_width=0.5, name='SUPERl %',
                           legendgroup='1',
                           ),
                   row=1, col=1)
@@ -90,11 +90,12 @@ with tab1:
                           legendgroup ='1',
                           ),
                   row=1, col=1)
-    fig.add_trace(go.Line(x=df.index, y=df['SUPERTs'] * (1 + (s_line / 100)), line_width=0.5, name='SUPERs_2',
+    fig.add_trace(go.Line(x=df.index, y=df['SUPERTs'] * (1 + (s_line / 100)), line_width=0.5, name='SUPERTs %',
                           legendgroup='1',
                           ),
                   row=1, col=1)
 
+    # SUPERTREND %
     fig.add_trace(go.Line(x=df.index, y=df['SUPERTp'], line_width=1, name='SUPER %',
                           legendgroup ='2',
                           ),
@@ -132,6 +133,8 @@ with tab1:
 
     fig.add_hline(y=l_line, line_width=1, line_dash="dash", line_color="red", row=2, col=1)
     fig.add_hline(y=s_line, line_width=1, line_dash="dash", line_color="green", row=2, col=1)
+
+    fig.add_hline(y=20, line_width=1, line_dash="dash", line_color="green", row=3, col=1)
 
     fig.add_hline(y=30, line_width=1, line_dash="dash", line_color="purple", row=4, col=1)
     fig.add_hline(y=70, line_width=1, line_dash="dash", line_color="purple", row=4, col=1)

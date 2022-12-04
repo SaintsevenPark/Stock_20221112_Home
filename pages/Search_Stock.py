@@ -26,7 +26,7 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 # --------------------- 각종 변수 초기화
 stock_length = 100
 start_date = '2022'
-default_strategy = 0
+default_strategy = 10
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
     "Strategy 2": sst.strategy02,
@@ -51,9 +51,10 @@ df_stocklist_kosdaq.drop(df_stocklist_kosdaq.columns[[0,2,4,5,6,7,8,9,10,11,12,1
 selected_strategy = st.sidebar.selectbox("전략 선택", strategy_names_to_funcs.keys(), index=default_strategy)
 
 
-tab1, tab2 = st.tabs(['NASDAQ', 'KOSDAQ'])
+tab1, tab2 = st.tabs(['NASDAQ', 'KRX'])
 # ------------------------------ NASDAQ 종목 검색 -----------------------------------------------
 with tab1:
+    buy_stock_num = []
     buy_stock_symbol = []
     buy_stock_name = []
     buy_stock_price = []
@@ -85,6 +86,7 @@ with tab1:
                     # if Buy[-1] >= 198:
                     if Buy[-1] >= len(df)-2:
                         con_text = "매수"
+                        buy_stock_num.append(i)
                         buy_stock_symbol.append(df_stocklist_nasdaq['Symbol'].iloc[i])
                         buy_stock_name.append(df_stocklist_nasdaq['Name'].iloc[i])
                         buy_stock_price.append(df['Close'].iloc[-1])
@@ -94,6 +96,7 @@ with tab1:
                     # if superBuy[-1] >= 198:
                     if superBuy[-1] >= len(df)-2:
                         con_text = "매수"
+                        buy_stock_num.append(i)
                         buy_stock_symbol.append(df_stocklist_nasdaq['Symbol'].iloc[i])
                         buy_stock_name.append(df_stocklist_nasdaq['Name'].iloc[i])
                         buy_stock_price.append(df['Close'].iloc[-1])
@@ -108,16 +111,19 @@ with tab1:
         with info.container():
             st.sidebar.text("완료")
         df_boughtStock_file = pd.DataFrame()
+        df_boughtStock_file['Num'] = buy_stock_num
         df_boughtStock_file['Symbol'] = buy_stock_symbol
         df_boughtStock_file['Name'] = buy_stock_name
         df_boughtStock_file['Price'] = buy_stock_price
         now = datetime.datetime.now().strftime('%Y%m%d_%H%M_%S')
-        df_boughtStock_file.to_csv(f".\\bought data\\nasdaq_{now}_{selected_strategy}.csv")
         st.dataframe(df_boughtStock_file)
+        df_boughtStock_file.to_csv(f".\\bought data\\nasdaq_{now}_{selected_strategy}.csv")
+
 
 
 # ------------------------------------ KRX --------------------------------------------
 with tab2:
+    buy_stock_num = []
     buy_stock_symbol = []
     buy_stock_name = []
     buy_stock_price = []
@@ -149,6 +155,7 @@ with tab2:
                     # if Buy[-1] >= 198:
                     if Buy[-1] >= len(df)-2:
                         con_text = "매수"
+                        buy_stock_num.append(i)
                         buy_stock_symbol.append(df_stocklist_kosdaq['Code'].iloc[i])
                         buy_stock_name.append(df_stocklist_kosdaq['Name'].iloc[i])
                         buy_stock_price.append(df['Close'].iloc[-1])
@@ -158,6 +165,7 @@ with tab2:
                     # if superBuy[-1] >= 198:
                     if superBuy[-1] >= len(df)-2:
                         con_text = "매수"
+                        buy_stock_num.append(i)
                         buy_stock_symbol.append(df_stocklist_kosdaq['Code'].iloc[i])
                         buy_stock_name.append(df_stocklist_kosdaq['Name'].iloc[i])
                         buy_stock_price.append(df['Close'].iloc[-1])
@@ -172,12 +180,14 @@ with tab2:
         with info.container():
             st.sidebar.text("완료")
         df_boughtStock_file = pd.DataFrame()
+        df_boughtStock_file['Num'] = buy_stock_num
         df_boughtStock_file['Code'] = buy_stock_symbol
         df_boughtStock_file['Name'] = buy_stock_name
         df_boughtStock_file['Price'] = buy_stock_price
         now = datetime.datetime.now().strftime('%Y%m%d_%H%M_%S')
-        df_boughtStock_file.to_csv(f".\\bought data\\kosdaq_{now}_{selected_strategy}.csv")
         st.dataframe(df_boughtStock_file)
+        df_boughtStock_file.to_csv(f".\\bought data\\kosdaq_{now}_{selected_strategy}.csv")
+
 
 
 code = '''def hello():
