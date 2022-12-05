@@ -15,7 +15,7 @@ from saintsevenlib import saintsevenstrategy as sst
 l_line = 2
 s_line = -10
 stock_count = 100
-default_strategy = 10
+default_strategy = 8
 
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
@@ -68,57 +68,16 @@ df['Buy'] = np.nan
 for i in Buy:
     df['Buy'].iloc[i] = df['Close'].iloc[i]
 
+df['Sell'] = np.nan
+for i in Sell:
+    df['Sell'].iloc[i] = df['Close'].iloc[i]
+
+
 # # -----------------------  Matplotlib 시작
 df['SUPERlp'] = df['SUPERTl'] *  (1 + (l_line / 100))
 df['SUPERsp'] = df['SUPERTs'] *  (1 + (s_line / 100))
-#
-# plt.style.use('fivethirtyeight')
-# plt.rcParams['figure.figsize'] = (24, 6)
-#
-# # fig, ax = plt.subplots(figsize=(12,3))
-# fig, ax = plt.subplots()
-# ax = plt.plot(df['Close'], linewidth = 1, label = 'CLOSING PRICE')
-# ax = plt.plot(df['SUPERTl'], linewidth = 1, label = 'SUPER TRENDl')
-# ax = plt.plot(df['SUPERTlp'], linewidth = 1, label = 'SUPER TRENDl %')
-# ax = plt.plot(df['SUPERTs'], linewidth = 1, label = 'SUPER TRENDs')
-# ax = plt.plot(df['SUPERTsp'], linewidth = 1, label = 'SUPER TRENDs %')
-# ax = plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
-# ax = plt.title(f"[{stock_code}] {stock_name} : {stock_price}")
-# ax = plt.legend(loc = 'best')
-#
-# st.pyplot(fig, clear_figure=True)
-#
-# fig, ax = plt.subplots()
-# ax = plt.plot(df['STOCHRSIk'], linewidth = 1, label = 'CLOSING PRICE')
-# ax = plt.plot(df['STOCHRSId'], linewidth = 1, label = 'SUPER TRENDl')
-# # ax = plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
-# ax = plt.title(f"[{stock_code}] {stock_name} : {stock_price}")
-# ax = plt.legend(loc = 'best')
-#
-# st.pyplot(fig, clear_figure=True)
 
-# # -----------------------  Matplotlib 시작 다른 방법
-# plt.style.use('fivethirtyeight')
-# # plt.rcParams['figure.figsize'] = (24, 6)
-# fig = plt.figure(figsize = (24,12))
-# plt.subplot(2, 1, 1)
-# plt.plot(df['Close'], linewidth = 1, label = 'CLOSING PRICE')
-# plt.plot(df['SUPERTl'], linewidth = 1, label = 'SUPER TRENDl')
-# # plt.plot(df['SUPERTlp'], linewidth = 1, label = 'SUPER TRENDl %')
-# plt.plot(df['SUPERTs'], linewidth = 1, label = 'SUPER TRENDs')
-# # plt.plot(df['SUPERTsp'], linewidth = 1, label = 'SUPER TRENDs %')
-# plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
-# plt.title(f"[{stock_code}] {stock_name} : {stock_price}")
-# plt.legend(loc = 'best')
-# # plt.axis('off')
-# plt.subplot(2, 1, 2, sharex=True)
-# plt.plot(df['STOCHRSIk'], linewidth = 1, label = 'STOCHRSIk')
-# plt.plot(df['STOCHRSId'], linewidth = 1, label = 'STOCHRSId')
-# plt.legend(loc = 'best')
-# plt.subplots_adjust(wspace=.025, hspace=.05)
-# st.pyplot(fig)
 
-# ------------------------------ Matplotlib 두번째
 st.set_option('deprecation.showPyplotGlobalUse', False)
 plt.style.use('fivethirtyeight')
 fig = plt.figure(figsize = (30,25))
@@ -130,6 +89,8 @@ plt.plot(df['SUPERTs'], linewidth = 0.5, label = 'SUPER TRENDs')
 # plt.plot(df['SUPERTsp'], linewidth = 1, label = 'SUPER TRENDs %')
 # plt.plot(df['EMA200'], linewidth = 1, label = 'EMA200')
 plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
+# plt.plot(df.index, df['Sell'], marker='v', color='green', markersize=10, linewidth=0, label='Sell SIGNAL')
+
 plt.fill_between(df.index, df['SUPERTl'], df['SUPERTlp'], color='r', alpha=0.1)
 plt.fill_between(df.index, df['SUPERTs'], df['SUPERTsp'], color='b', alpha=0.1)
 plt.title("Super Trend")
@@ -139,7 +100,7 @@ plt.legend(loc = 'best')
 ax2 = plt.subplot(4, 1, 2, sharex=ax1)
 plt.plot(df['STOCHRSIk'], linewidth = 1, label = 'STOCHRSIk')
 plt.plot(df['STOCHRSId'], linewidth = 1, label = 'STOCHRSId')
-plt.plot(df.index, (100 / df['Buy']) + 20, marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
+plt.plot(df.index, (df['Buy'] * 0) + df['STOCHRSIk'] , marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
 plt.axhline(y=20, color='red', linewidth=0.8, linestyle='--')
 plt.title('Stochastic RSI')
 plt.legend(loc = 'best')
@@ -156,9 +117,11 @@ plt.subplots_adjust(wspace=.025, hspace=0.2)
 
 ax4 = plt.subplot(4, 1, 4, sharex=ax1)
 plt.plot(df['Close'], linewidth = 1, label = 'CLOSE')
-plt.plot(df['BBL'], linewidth = 1, label = 'BBL')
-plt.plot(df['BBM'], linewidth = 1, label = 'BBM')
-plt.plot(df['BBU'], linewidth = 1, label = 'BBU')
+# plt.plot(df['BBL'], linewidth = 0.5, label = 'BBL', linestyle='--')
+# plt.plot(df['BBM'], linewidth = 0.5, label = 'BBM')
+plt.fill_between(df.index, df['BBL'], df['BBM'], color='r', alpha=0.1)
+# plt.plot(df['BBU'], linewidth = 0.5, label = 'BBU')
+plt.fill_between(df.index, df['BBU'], df['BBM'], color='green', alpha=0.1)
 plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
 plt.title('Bollinger Band')
 plt.legend(loc = 'best')

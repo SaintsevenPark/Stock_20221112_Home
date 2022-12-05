@@ -60,7 +60,8 @@ with tab1:
     Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
 
     # -----------------------------Matplotlib Start ----------------
-    plt.figure(figsize=(30, 10), dpi=40)
+    # plt.figure(figsize=(60, 20), dpi=80)
+    plt.figure(figsize=(60, 20))
     plt.style.use('fivethirtyeight')
 
     fig, ax = plt.subplots()

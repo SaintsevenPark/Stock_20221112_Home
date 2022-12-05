@@ -230,8 +230,8 @@ def strategy09(df, l_line, s_line):
         if df['SUPERTd'].iloc[i] > 0:
             if df['Close'].iloc[i] >= df['SUPERTlp'].iloc[i] > df['Close'].iloc[i-1]:
                 buy.append(i)
-            # if df['SUPERTp'].iloc[i] < (l_line * 6) < df['SUPERTp'].iloc[i-1]:
-            #     sell.append(i)
+            if df['SUPERTp'].iloc[i] < (l_line + 12) < df['SUPERTp'].iloc[i-1]:
+                sell.append(i)
         elif df['SUPERTd'].iloc[i] < 0:
             if df['Close'].iloc[i] >= df['SUPERTsp'].iloc[i] > df['Close'].iloc[i-1]:
                 buy.append(i)

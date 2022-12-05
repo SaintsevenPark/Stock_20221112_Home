@@ -143,7 +143,7 @@ with tab1:
     fig.add_hline(y=50, line_width=1, line_dash="dash", line_color="purple", row=5, col=1)
     fig.add_hline(y=70, line_width=1, line_dash="dash", line_color="purple", row=5, col=1)
     # fig.add_hline(y=15000, line_width=1, line_dash="dash", line_color="pink", row=1, col=1)
-    fig.update_layout(height=1400, width=600,
+    fig.update_layout(height=2000, width=600,
                       legend_tracegroupgap = 130,)
 
     st.plotly_chart(fig, use_container_width = True)
