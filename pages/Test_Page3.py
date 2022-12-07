@@ -28,6 +28,9 @@ st.markdown("https://www.youtube.com/watch?v=u1b5v2Is8iY")
 # st.markdown("### 테스트 페이지")
 # 변수초기화
 stock_count = 100
+l_line = 2
+s_line = -10
+
 
 df_stocklist = pd.DataFrame()
 # 새로 읽어올때만 실행
@@ -44,14 +47,12 @@ number = st.number_input('Insert a number', min_value=0, max_value=stock_count)
 
 tick_code = df_stocklist['Code'].iloc[number]
 df = fdr.DataReader(tick_code, '2022')
-df = ssl.get_indicator(df)
+df = ssl.get_indicator(df, l_line, s_line)
 
 # st.dataframe(df)
 
 #   작전 선택
-l_line = 2
-s_line = -10
-Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+Buy, Sell, superBuy, superSell, desc = sst.strategy09(df)
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(f"### {df_stocklist['Name'].iloc[number]}  | 현재가 : {df['Close'].iloc[-1]}")

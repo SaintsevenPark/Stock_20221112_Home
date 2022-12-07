@@ -13,7 +13,10 @@ from saintsevenlib import saintsevenstrategy as sst
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 # 변수초기화
+l_line = 2
+s_line = -10
 stock_count = 100
+start_year = '2021'
 df_stocklist_krx = pd.DataFrame()
 df_stocklist_nasdaq = pd.DataFrame()
 
@@ -40,8 +43,8 @@ with tab1:
     number = st.number_input('Insert a number', min_value=0, max_value=stock_count)
 
     tick_code = df_stocklist_krx['Code'].iloc[number]
-    df = fdr.DataReader(tick_code, '2022')
-    df = ssl.get_indicator(df)
+    df = fdr.DataReader(tick_code, start_year)
+    df = ssl.get_indicator(df, l_line, s_line)
 
 
     with st.expander("종목 데이터 보기"):
@@ -53,30 +56,19 @@ with tab1:
     st.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
 
     #   작전 선택
-    l_line = 2
-    s_line = -10
-    df['SUPERTl2'] = df['SUPERTl'] * (1 + (l_line / 100))
-    df['SUPERTs2'] = df['SUPERTs'] * (1 + (s_line / 100))
-    Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+    Buy, Sell, superBuy, superSell, desc = sst.strategy09(df)
 
     # -----------------------------Matplotlib Start ----------------
     # plt.figure(figsize=(60, 20), dpi=80)
-    plt.figure(figsize=(60, 20))
     plt.style.use('fivethirtyeight')
 
-    fig, ax = plt.subplots()
-    ax = df['Close'].plot(linewidth=2)
-    ax = df['EMA200'].plot(linewidth=2)
-    ax = df['SUPERTl10'].plot(linewidth=2)
-    ax = df['SUPERTs10'].plot(linewidth=2)
-    ax = df['SUPERTl11'].plot(linewidth=2)
-    ax = df['SUPERTs11'].plot(linewidth=2)
-    # ax[0] = df['SUPERTl10'].plot(linewidth=1)
-    # ax[0] = df['SUPERTs10'].plot(linewidth=1)
-    # ax[0] = df['SUPERTl11'].plot(linewidth=1)
-    # ax[0] = df['SUPERTs11'].plot(linewidth=1)
-    # ax[0] = df['SUPERTl12'].plot(linewidth=1)
-    # ax[0] = df['SUPERTs12'].plot(linewidth=1)
+    fig, ax = plt.subplots(figsize=(30, 9))
+    ax = df['Close'][300:].plot(linewidth=1)
+    ax = df['EMA200'][300:].plot(linewidth=1)
+    ax = df['SUPERTl10'][300:].plot(linewidth=1)
+    ax = df['SUPERTs10'][300:].plot(linewidth=1)
+    ax = df['SUPERTl11'][300:].plot(linewidth=1)
+    ax = df['SUPERTs11'][300:].plot(linewidth=1)
 
     # df['Close'].plot(linewidth=1)
     st.pyplot(fig=fig, clear_figure=True)

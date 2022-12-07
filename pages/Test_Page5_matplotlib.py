@@ -14,7 +14,7 @@ from saintsevenlib import saintsevenstrategy as sst
 
 l_line = 2
 s_line = -10
-stock_count = 100
+stock_count = 300
 default_strategy = 8
 
 strategy_names_to_funcs = {
@@ -45,7 +45,7 @@ number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock
 
 tick_code = df_stocklist['Code'].iloc[number]
 df = fdr.DataReader(tick_code, '2022')
-df = ssl.get_indicator(df)
+df = ssl.get_indicator(df, l_line, s_line)
 stock_code = df_stocklist['Code'].iloc[number]
 stock_name = df_stocklist['Name'].iloc[number]
 stock_price = df['Close'].iloc[-1]
@@ -55,12 +55,8 @@ with st.sidebar.expander("주식 목록"):
     st.dataframe(df_stocklist)
 
 # ====================   전략 선택 매수 마킹 ===========================
-if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, l_line, s_line)
-    st.write(desc)
-else:
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-    st.write(desc)
+Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+st.write(desc)
 
 
 # MatPlotlib에서 마킹하기 위해 df 가공함
@@ -74,10 +70,6 @@ for i in Sell:
 
 
 # # -----------------------  Matplotlib 시작
-df['SUPERlp'] = df['SUPERTl'] *  (1 + (l_line / 100))
-df['SUPERsp'] = df['SUPERTs'] *  (1 + (s_line / 100))
-
-
 st.set_option('deprecation.showPyplotGlobalUse', False)
 plt.style.use('fivethirtyeight')
 fig = plt.figure(figsize = (30,25))
@@ -87,7 +79,7 @@ plt.plot(df['SUPERTl'], linewidth = 0.5, label = 'SUPER TRENDl')
 # plt.plot(df['SUPERTlp'], linewidth = 1, label = 'SUPER TRENDl %')
 plt.plot(df['SUPERTs'], linewidth = 0.5, label = 'SUPER TRENDs')
 # plt.plot(df['SUPERTsp'], linewidth = 1, label = 'SUPER TRENDs %')
-# plt.plot(df['EMA200'], linewidth = 1, label = 'EMA200')
+plt.plot(df['EMA200'], linewidth = 1, label = 'EMA200')
 plt.plot(df.index, df['Buy'], marker='^', color='r', markersize=10, linewidth=0, label='BUY SIGNAL')
 # plt.plot(df.index, df['Sell'], marker='v', color='green', markersize=10, linewidth=0, label='Sell SIGNAL')
 

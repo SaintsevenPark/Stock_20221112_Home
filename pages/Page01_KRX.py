@@ -58,7 +58,7 @@ number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock
 
 tick_code = df_stocklist['Code'].iloc[number]
 df = fdr.DataReader(tick_code, start=start_year)
-df = ssl.get_indicator(df)
+df = ssl.get_indicator(df, l_line, s_line)
 stock_code = df_stocklist['Code'].iloc[number]
 stock_name = df_stocklist['Name'].iloc[number]
 stock_price = df['Close'].iloc[-1]
@@ -69,18 +69,12 @@ with st.sidebar.expander("주식 목록"):
 
 
 # ====================   전략 선택 매수 마킹 ===========================
-if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, l_line, s_line)
-    st.write(desc)
-else:
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-    st.write(desc)
+Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+st.write(desc)
 
 # ------------------------ Plotly 시작
 # Close
-df['SUPERlp'] = df['SUPERTl'] *  (1 + (l_line / 100))
-df['SUPERsp'] = df['SUPERTs'] *  (1 + (s_line / 100))
-fig = df[['Close', 'SUPERTl', 'SUPERTs', 'SUPERlp', 'SUPERsp', 'EMA200']].iplot(asFigure=True, xTitle="The X Axis",
+fig = df[['Close', 'SUPERTl', 'SUPERTs', 'SUPERTlp', 'SUPERTsp', 'EMA200']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="일간 가격 변동")
 for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))

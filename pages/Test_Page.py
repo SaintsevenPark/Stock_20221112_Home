@@ -19,6 +19,8 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 
 # 변수초기화
 stock_count = 100
+l_line = 2
+s_line = -10
 df_stocklist_krx = pd.DataFrame()
 df_stocklist_nasdaq = pd.DataFrame()
 
@@ -46,7 +48,7 @@ with tab1:
 
     tick_code = df_stocklist_krx['Code'].iloc[number]
     df = fdr.DataReader(tick_code, '2022')
-    df = ssl.get_indicator(df)
+    df = ssl.get_indicator(df, l_line, s_line)
 
     with st.expander("종목 데이터 보기"):
         st.dataframe(df)
@@ -57,10 +59,7 @@ with tab1:
     st.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
 
     #   작전 선택
-    l_line = 2
-    s_line = -10
-    # Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
-    Buy, Sell, superBuy, superSell, desc = sst.strategy10(df, l_line=l_line, s_line=s_line)
+    Buy, Sell, superBuy, superSell, desc = sst.strategy10(df)
 
     # -----------------------------Plotly Start ----------------
     fig = make_subplots(
@@ -155,7 +154,7 @@ with tab2:
 
     tick_code = df_stocklist_nasdaq['Symbol'].iloc[number]
     df = fdr.DataReader(tick_code, '2022')
-    df = ssl.get_indicator(df)
+    df = ssl.get_indicator(df, l_line, s_line)
     df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
 
     with st.expander("종목 데이터 보기"):
@@ -167,9 +166,7 @@ with tab2:
     st.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
 
     #   작전 선택
-    l_line = 2
-    s_line = -10
-    Buy, Sell, superBuy, superSell, desc = sst.strategy09(df, l_line=l_line, s_line=s_line)
+    Buy, Sell, superBuy, superSell, desc = sst.strategy09(df)
 
     # -----------------------------Plotly Start ----------------
     fig = make_subplots(

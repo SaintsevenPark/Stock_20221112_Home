@@ -20,6 +20,8 @@ from saintsevenlib import saintsevenstrategy as sst
 # -------------------- 페이지 형태 초기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
+l_line = 2
+s_line = -10
 stock_length = 100
 start_year = '2022'
 default_strategy = 10
@@ -58,7 +60,7 @@ number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock
 
 tick_code = df_stocklist['Symbol'].iloc[number]
 df = fdr.DataReader(tick_code, start=start_year)
-df = ssl.get_indicator(df)
+df = ssl.get_indicator(df, l_line, s_line)
 stock_code = df_stocklist['Symbol'].iloc[number]
 stock_name = df_stocklist['Name'].iloc[number]
 stock_price = df['Close'].iloc[-1]
@@ -69,14 +71,8 @@ with st.sidebar.expander("주식 목록"):
 
 
 # ====================   전략 선택 매수 마킹 ===========================
-if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
-    l_line = 2
-    s_line = -10
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, l_line, s_line)
-    st.write(desc)
-else:
-    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-    st.write(desc)
+Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+st.write(desc)
 
 # ----------------------------------
 fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",

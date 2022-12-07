@@ -24,7 +24,9 @@ from saintsevenlib import saintsevenstrategy as sst
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 # --------------------- 각종 변수 초기화
-stock_length = 100
+l_line = 2
+s_line = -10
+stock_length = 300
 start_date = '2022'
 default_strategy = 10
 strategy_names_to_funcs = {
@@ -73,15 +75,11 @@ with tab1:
         for i in range(len(df_stocklist_nasdaq)-1):
             with numbers.container():
                 df = fdr.DataReader(df_stocklist_nasdaq['Symbol'].iloc[i], start_date)
-                df = ssl.get_indicator(df)
-                # ***********************************************************************
-                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
-                    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
-                    st.write(desc)
-                else:
-                    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-                    st.write(desc)
-                # ***********************************************************************
+                df = ssl.get_indicator(df, l_line, s_line)
+                # *************************************************************************************
+                Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+                st.write(desc)
+                # *************************************************************************************
                 if len(Buy) > 0:
                     # if Buy[-1] >= 198:
                     if Buy[-1] >= len(df)-2:
@@ -142,15 +140,11 @@ with tab2:
         for i in range(len(df_stocklist_kosdaq)-1):
             with numbers.container():
                 df = fdr.DataReader(str(df_stocklist_kosdaq['Code'].iloc[i]).zfill(6), start_date)
-                df = ssl.get_indicator(df)
-                # ***********************************************************************
-                if selected_strategy == 'Strategy 9' or selected_strategy == 'Strategy 10' or selected_strategy == 'Strategy 11':
-                    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df, 2, -10)
-                    st.write(desc)
-                else:
-                    Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
-                    st.write(desc)
-                # ***********************************************************************
+                df = ssl.get_indicator(df, l_line, s_line)
+                # ***********************************************************************************
+                Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
+                st.write(desc)
+                # ***********************************************************************************
                 if len(Buy) > 0:
                     # if Buy[-1] >= 198:
                     if Buy[-1] >= len(df)-2:

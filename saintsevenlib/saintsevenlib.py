@@ -2,7 +2,8 @@ import pandas_ta as pt
 import numpy as np
 
 
-def get_indicator(df):
+def get_indicator(df, l_line, s_line):
+    # BOLLINGER BAND
     bb = pt.bbands(df['Close'], timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)
     df['BBL'] = bb[f"{bb.columns[0]}"]
     df['BBM'] = bb[f"{bb.columns[1]}"]
@@ -41,6 +42,9 @@ def get_indicator(df):
     df['SUPERTl'] = supert[f"{supert.columns[2]}"]
     df['SUPERTs'] = supert[f"{supert.columns[3]}"]
     df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
+    df['SUPERTlp'] = df['SUPERTl'] * (1 + (l_line / 100))
+    df['SUPERTsp'] = df['SUPERTs'] * (1 + (s_line / 100))
+
     # Triple SuperTrend 10 - 11 - 12    1 - 2 - 3
     supert10 = pt.supertrend(df['High'], df['Low'], df['Close'], length=10, multiplier=1.0)
     df['SUPERT10'] = supert10[f"{supert10.columns[0]}"]

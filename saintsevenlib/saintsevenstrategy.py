@@ -218,19 +218,19 @@ def strategy08(df):
 
 
 # --------------------------------- 전략 9 -----------------------------------------
-def strategy09(df, l_line, s_line):
+def strategy09(df):
     buy, sell, superbuy, supersell = [], [], [], []
+    l_line = 2
+    s_line = -10
 
     # SUPERTd 가 1일때가 SUPERTl이 종가보다 아래에 있고 값이 있슴 -> l
     # SUPERTd 가 -1일때가 SUPERTs가 종가보다 위에 있고 값이 있슴 -> s
-    df['SUPERTlp'] = df['SUPERTl'] * (1 + (l_line / 100))
-    df['SUPERTsp'] = df['SUPERTs'] * (1 + (s_line / 100))
 
     for i in range(2, len(df)):
         if df['SUPERTd'].iloc[i] > 0:
             if df['Close'].iloc[i] >= df['SUPERTlp'].iloc[i] > df['Close'].iloc[i-1]:
                 buy.append(i)
-            if df['SUPERTp'].iloc[i] < (l_line + 12) < df['SUPERTp'].iloc[i-1]:
+            if df['SUPERTlp'].iloc[i] < (l_line + 12) < df['SUPERTlp'].iloc[i-1]:
                 sell.append(i)
         elif df['SUPERTd'].iloc[i] < 0:
             if df['Close'].iloc[i] >= df['SUPERTsp'].iloc[i] > df['Close'].iloc[i-1]:
@@ -242,24 +242,24 @@ def strategy09(df, l_line, s_line):
 
 
 # --------------------------------- 전략 10 -----------------------------------------
-def strategy10(df, l_line, s_line):
+def strategy10(df):
     buy, sell, superbuy, supersell = [], [], [], []
+    l_line = 2
+    s_line = -10
 
     # SUPERTd 가 1일때가 SUPERTl이 종가보다 아래에 있고 값이 있슴 -> l
     # SUPERTd 가 -1일때가 SUPERTs가 종가보다 위에 있고 값이 있슴 -> s
 
-    df['SUPERTp'] = ((df['Close'] - df['SUPERT']) / df['Close']) * 100
-
     for i in range(2, len(df)):
         if df['SUPERTd'].iloc[i] > 0:
-            if df['SUPERTp'].iloc[i] > l_line > df['SUPERTp'].iloc[i-1]\
+            if df['SUPERTlp'].iloc[i] > l_line > df['SUPERTlp'].iloc[i-1]\
                     and 30 > df['STOCHRSIk'].iloc[i] > df['STOCHRSIk'].iloc[i-1]\
                     and 30 > df['STOCHRSId'].iloc[i] > df['STOCHRSId'].iloc[i-1]:
                 buy.append(i)
             # if df['SUPERTp'].iloc[i] < (l_line * 6) < df['SUPERTp'].iloc[i-1]:
             #     sell.append(i)
         elif df['SUPERTd'].iloc[i] < 0:
-            if df['SUPERTp'].iloc[i] > s_line > df['SUPERTp'].iloc[i - 1] \
+            if df['SUPERTsp'].iloc[i] > s_line > df['SUPERTsp'].iloc[i - 1] \
                 and df['SUPERTs'].iloc[i] == df['SUPERTs'].iloc[i - 1]  == df['SUPERTs'].iloc[i - 2] \
                 and 30 > df['STOCHRSIk'].iloc[i] > df['STOCHRSIk'].iloc[i-1] \
                 and 30 > df['STOCHRSId'].iloc[i] > df['STOCHRSId'].iloc[i - 1]:
@@ -271,14 +271,11 @@ def strategy10(df, l_line, s_line):
     return buy, sell, superbuy, supersell, desc
 
 # --------------------------------- 전략 11 -----------------------------------------
-def strategy11(df, l_line, s_line):
+def strategy11(df):
     buy, sell, superbuy, supersell = [], [], [], []
 
     # SUPERTd 가 1일때가 SUPERTl이 종가보다 아래에 있고 값이 있슴 -> l
     # SUPERTd 가 -1일때가 SUPERTs가 종가보다 위에 있고 값이 있슴 -> s
-
-    df['SUPERTlp'] = df['SUPERTl'] * (1 + (l_line / 100))
-    df['SUPERTsp'] = df['SUPERTs'] * (1 + (s_line / 100))
 
     for i in range(len(df)):
         if df['SUPERTd'].iloc[i] > 0:
@@ -294,6 +291,6 @@ def strategy11(df, l_line, s_line):
                     # and df['STOCHRSIk'].iloc[i] > df['STOCHRSIk'].iloc[i-1]:
                 buy.append(i)
 
-    desc = f'[전략11] SuperT 지표이용,  SUPERTl(1)구간일때 종가가 `{l_line}`을 우상향 SUPERs(-1)구간일때 Superts 가 내려가다가 수평으로 바뀔때매수'
+    desc = f'[전략11] SuperT 지표이용,  SUPERTl(1)구간일때는 종가가 Supertl를 접근했다가 우상향, SUPERs(-1)구간일때 Superts 가 내려가다가 수평으로 바뀔때매수'
 
     return buy, sell, superbuy, supersell, desc
