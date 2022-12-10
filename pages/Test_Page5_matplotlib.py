@@ -177,7 +177,7 @@ plt.style.use('fivethirtyeight')
 fig = plt.figure(figsize=(20, 10))
 
 apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
-        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
+        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=200,
                          color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False)]
 
 mpf.plot(ohcl_squeeze,

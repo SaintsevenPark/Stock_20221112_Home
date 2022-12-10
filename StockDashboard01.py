@@ -49,6 +49,11 @@ strategy_names_to_funcs = {
 }
 
 
+def get_stock_list():
+    df = fdr.StockListing('KRX')
+    df.to_csv('stocklist_krx.csv')
+
+
 def plot_by_plotly():
     # 지수 불러오기
     indices = ['KS11', 'KQ11', 'DJI', 'IXIC']
@@ -159,5 +164,6 @@ def plot_by_matplotlib():
 
 
 if __name__ == '__main__':
+    # get_stock_list()
     # plot_by_plotly()
     plot_by_matplotlib()
