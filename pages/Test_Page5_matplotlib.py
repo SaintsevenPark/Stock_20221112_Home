@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 import pandas_ta as pt
+import mplfinance as mpf
 
 from plotly.subplots import make_subplots
 #
@@ -44,8 +45,24 @@ selected_strategy = st.sidebar.selectbox("전략 선택", strategy_names_to_func
 number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock_count)
 
 tick_code = df_stocklist['Code'].iloc[number]
-df = fdr.DataReader(tick_code, '2022')
-df = ssl.get_indicator(df, l_line, s_line)
+df_origin = fdr.DataReader(tick_code, '2022')
+df_heiken = ssl.heikin_ashi(df_origin).astype(int)
+# df_heiken = df_heiken.astype(int)
+df_squeeze = ssl.get_squeeze_momentum(df_origin)
+
+# -----------------------------------------------------------------------
+with st.expander("순수 데이터 프레임"):
+    st.dataframe(df_origin)
+with st.expander("Heiken Ashi 데이터 프레임"):
+    st.dataframe(df_heiken)
+with st.expander("Squeeze 데이터 프레임"):
+    st.dataframe(df_squeeze)
+
+df = ssl.get_indicator(df_origin, l_line, s_line)
+with st.expander("모든 지표"):
+    st.dataframe(df)
+# -----------------------------------------------------------------------
+
 stock_code = df_stocklist['Code'].iloc[number]
 stock_name = df_stocklist['Name'].iloc[number]
 stock_price = df['Close'].iloc[-1]
@@ -119,6 +136,59 @@ plt.title('Bollinger Band')
 plt.legend(loc = 'best')
 plt.subplots_adjust(wspace=.025, hspace=0.2)
 
-# matplotlib.pyplot.hlines(y, xmin, xmax, colors=None, linestyles='solid', label='', *, data=None, **kwargs)
 
 st.pyplot()
+
+# -----------------------  Heiken Ashi  Matplotlib 시작
+ohcl_heiken = df_heiken[['Open', 'High', 'Close', 'Low']]
+ohcl_heiken = ohcl_heiken.astype(int)
+# st.set_option('deprecation.showPyplotGlobalUse', False)
+# plt.style.use('fivethirtyeight')
+fig = plt.figure(figsize=(30, 10))
+
+mpf.plot(ohcl_heiken,
+         volume_panel=2,
+         figratio=(4, 1),
+         figscale=4,
+         style='charles',
+         type='candle',
+         returnfig=True)
+
+st.pyplot()
+
+# -----------------------  Squeeze Momentum  Matplotlib 시작
+ohcl_squeeze = df_squeeze[['Open', 'High', 'Close', 'Low']]
+
+colors = []
+
+for ind, val in enumerate(df_squeeze['value']):
+    if val >= 0:
+        color = 'green'
+        if val > df_squeeze['value'][ind - 1]:
+            color = 'lime'
+    else:
+        color = 'maroon'
+        if val < df_squeeze['value'][ind - 1]:
+            color = 'red'
+    colors.append(color)
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
+plt.style.use('fivethirtyeight')
+fig = plt.figure(figsize=(20, 10))
+
+apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
+        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
+                         color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False)]
+
+mpf.plot(ohcl_squeeze,
+         volume_panel=2,
+         figratio=(3, 1),
+         figscale=4,
+         style='charles',
+         type='candle',
+         addplot=apds,
+         returnfig=True)
+
+st.pyplot()
+
+

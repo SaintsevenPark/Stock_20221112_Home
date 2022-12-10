@@ -5,7 +5,7 @@ import FinanceDataReader as fdr
 import matplotlib.pyplot as plt
 # import time
 import numpy as np
-# import cufflinks as cf
+import cufflinks as cf
 # # # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
 # import plotly.offline as plyo
 # import plotly.graph_objects as go
@@ -104,7 +104,7 @@ def plot_by_matplotlib():
     for i in Sell:
         df_indices['Buy'].iloc[i] = df_indices['Close'].iloc[i]
 
-    # ---------------------------- Matplotlib 시잣
+    # ---------------------------- Matplotlib 시작
     st.set_option('deprecation.showPyplotGlobalUse', False)
     plt.style.use('fivethirtyeight')
     fig = plt.figure(figsize=(30, 25))
