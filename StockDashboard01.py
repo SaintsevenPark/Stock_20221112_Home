@@ -81,7 +81,7 @@ def plot_by_plotly():
 
     fig = df_indices[['STOCHRSIk', 'STOCHRSId']].iplot(asFigure=True, xTitle="The X Axis",
                                                        yTitle="The Y Axis", title="일간 가격 변동")
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 def plot_by_matplotlib():
     # 지수 불러오기

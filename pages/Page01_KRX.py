@@ -80,7 +80,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 # STOCHASTICRSI
 fig = df[['STOCHRSIk', 'STOCHRSId']].iplot(asFigure=True, xTitle="The X Axis",
@@ -90,7 +90,7 @@ for i in range(len(Buy)):
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
 fig.add_hline(y=20, line=dict(width=1, color='red', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 # 이동평균선
 fig = df[['Close', 'SMA5', 'SMA20']].iplot(asFigure=True, xTitle="The X Axis",
@@ -99,7 +99,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # Super Trend
 fig = df[['Close', 'SUPERTl', 'SUPERTs']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="Super Trend", theme='space')
@@ -107,7 +107,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # 볼린저밴드
 fig = df[['Close', 'BBL', 'BBU', 'BBM']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="볼린저 밴드")
@@ -115,7 +115,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # RSI
 fig = df['RSI'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="RSI")
@@ -125,7 +125,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # MFI
 fig = df['MFI'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="MFI")
@@ -135,7 +135,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # MACD
 fig = df[['MACD', 'MACDs']].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="MACD")
@@ -144,7 +144,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 # CCI
 fig = df['CCI'].iplot(asFigure=True, xTitle="The X Axis",
                         yTitle="The Y Axis", title="CCI")
@@ -154,7 +154,7 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 # TRIX
 fig = df[['TRIX', 'TRIXs']].iplot(asFigure=True, xTitle="The X Axis",
@@ -164,4 +164,4 @@ for i in range(len(Buy)):
     fig.add_vline(x=df.iloc[Buy].index[i], line=dict(width=1, color='red', dash='dash'))
 for i in range(len(Sell)):
     fig.add_vline(x=df.iloc[Sell].index[i], line=dict(width=1, color='blue', dash='dash'))
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)

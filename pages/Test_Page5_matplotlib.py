@@ -17,6 +17,7 @@ l_line = 2
 s_line = -10
 stock_count = 300
 default_strategy = 8
+start_year = '2022'
 
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
@@ -45,9 +46,8 @@ selected_strategy = st.sidebar.selectbox("전략 선택", strategy_names_to_func
 number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock_count)
 
 tick_code = df_stocklist['Code'].iloc[number]
-df_origin = fdr.DataReader(tick_code, '2022')
+df_origin = fdr.DataReader(tick_code, start=start_year)
 df_heiken = ssl.heikin_ashi(df_origin).astype(int)
-# df_heiken = df_heiken.astype(int)
 df_squeeze = ssl.get_squeeze_momentum(df_origin)
 
 # -----------------------------------------------------------------------
@@ -142,14 +142,14 @@ st.pyplot()
 # -----------------------  Heiken Ashi  Matplotlib 시작
 ohcl_heiken = df_heiken[['Open', 'High', 'Close', 'Low']]
 ohcl_heiken = ohcl_heiken.astype(int)
-# st.set_option('deprecation.showPyplotGlobalUse', False)
-# plt.style.use('fivethirtyeight')
-fig = plt.figure(figsize=(30, 10))
+st.set_option('deprecation.showPyplotGlobalUse', False)
+plt.style.use('fivethirtyeight')
+fig = plt.figure(figsize=(30, 15))
 
 mpf.plot(ohcl_heiken,
          volume_panel=2,
-         figratio=(4, 1),
-         figscale=4,
+         figratio=(3, 1),
+         figscale=2,
          style='charles',
          type='candle',
          returnfig=True)
@@ -174,16 +174,17 @@ for ind, val in enumerate(df_squeeze['value']):
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 plt.style.use('fivethirtyeight')
-fig = plt.figure(figsize=(20, 10))
+fig = plt.figure(figsize=(30, 15))
 
 apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
-        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=200,
-                         color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False)]
+        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
+                         color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False),
+        ]
 
 mpf.plot(ohcl_squeeze,
          volume_panel=2,
          figratio=(3, 1),
-         figscale=4,
+         figscale=1.5,
          style='charles',
          type='candle',
          addplot=apds,
