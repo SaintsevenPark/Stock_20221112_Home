@@ -14,6 +14,10 @@ import plotly.graph_objs as go
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
+
+# -------------------- 페이지 형태 최기화
+st.set_page_config(page_title=None, page_icon="chart_with_upwards_trend", layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 l_line = 2
 s_line = -10
 stock_count = 300
@@ -52,15 +56,15 @@ df_heiken = ssl.heikin_ashi(df_origin).astype(int)
 df_squeeze = ssl.get_squeeze_momentum(df_origin)
 
 # -----------------------------------------------------------------------
-with st.expander("순수 데이터 프레임"):
-    st.dataframe(df_origin)
-with st.expander("Heiken Ashi 데이터 프레임"):
-    st.dataframe(df_heiken)
-with st.expander("Squeeze 데이터 프레임"):
-    st.dataframe(df_squeeze)
+# with st.expander("순수 데이터 프레임"):
+#     st.dataframe(df_origin)
+# with st.expander("Heiken Ashi 데이터 프레임"):
+#     st.dataframe(df_heiken)
+# with st.expander("Squeeze 데이터 프레임"):
+#     st.dataframe(df_squeeze)
 df = ssl.get_indicator(df_origin, l_line, s_line)
-with st.expander("모든 지표"):
-    st.dataframe(df)
+# with st.expander("모든 지표"):
+#     st.dataframe(df)
 
 # -----------------------------------------------------------------------
 
@@ -116,29 +120,36 @@ with st.expander("필요한 지표만"):
 # 1
 trace1_1 = go.Scatter(x=df_just.index,
                       y=df_just['Close'],
-                      name='종가'
+                      name='종가',
+                      legendgroup='종가',
+                      legendrank=1,
                       )
 trace1_2 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTl'],
-                      name='슈퍼트렌드 l'
+                      name='슈퍼트렌드 l',
+                      legendgroup='종가'
                       )
 trace1_3 = go.Scatter(x=df_origin.index,
                       y=df_just['SUPERTs'],
-                      name='슈퍼트렌드 s'
+                      name='슈퍼트렌드 s',
+                      legendgroup='종가'
                       )
 trace1_4 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTlp'],
                       name='슈퍼트렌드 l %',
+                      legendgroup='종가',
                       line=dict(width=0.5)
                       )
 trace1_5 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTsp'],
                       name='슈퍼트렌드 s %',
+                      legendgroup='종가',
                       line=dict(width=0.5)
                       )
 trace1_6 = go.Scatter(x=df_just.index,
                       y=df_just['Buy'],
                       name='Buy',
+                      legendgroup='종가',
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -152,15 +163,18 @@ trace1_6 = go.Scatter(x=df_just.index,
 # 2 - Stochastic
 trace2_1 = go.Scatter(x=df_just.index,
                       y=df_just['STOCHRSIk'],
-                      name='StochasticRSI K'
+                      name='StochasticRSI K',
+                      legendgroup='StochasticRSI K'
                       )
 trace2_2 = go.Scatter(x=df_just.index,
                       y=df_just['STOCHRSId'],
-                      name='StochasticRSI d'
+                      name='StochasticRSI d',
+                      legendgroup='StochasticRSI K'
                       )
 trace2_3 = go.Scatter(x=df_just.index,
                       y=(df_just['Buy'] * 0) + df_just['STOCHRSId'],
                       name='Buy',
+                      legendgroup='StochasticRSI K',
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -174,15 +188,19 @@ trace2_3 = go.Scatter(x=df_just.index,
 # 3 - 5 , 20 이동평균선
 trace3_1 = go.Scatter(x=df_just.index,
                       y=df_just['SMA5'],
-                      name='5일 이동평균선'
+                      name='5일 이동평균선',
+                      legendgroup='5일 이동평균선',
+                      legendrank=3
                       )
 trace3_2 = go.Scatter(x=df_just.index,
                       y=df_just['SMA20'],
-                      name='20일 이동평균선'
+                      name='20일 이동평균선',
+                      legendgroup='5일 이동평균선'
                       )
 trace3_3 = go.Scatter(x=df_just.index,
                       y=df_just['Buy'] * 0.95,
                       name='Buy',
+                      legendgroup='5일 이동평균선',
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -199,11 +217,17 @@ trace4_1 = go.Candlestick(x=df_just.index,
                           high=df_just['High_HI'],
                           low=df_just['Low_HI'],
                           close=df_just['Close_HI'],
-                          name='Heiken Ashi'
+                          name='Heiken Ashi',
+                          legendgroup='Heiken Ashi',
+                          legendrank=4,
+                          increasing_line_color='red',
+                          decreasing_line_color='green',
                           )
 trace4_2 = go.Scatter(x=df_just.index,
                       y=df_just['Buy'] * 1.05,
                       name='Buy',
+                      legendgroup='Heiken Ashi',
+                      legendrank=4,
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -217,11 +241,15 @@ trace4_2 = go.Scatter(x=df_just.index,
 # 5. Squeeze
 trace5_1 = go.Bar(x=df_just.index,
                       y=df_just['SQ_value'],
-                      name='Candle Stick'
+                      name='Candle Stick',
+                      legendgroup='Candle Stick',
+                      legendrank=5
                       )
 trace5_2 = go.Scatter(x=df_just.index,
                       y=df_just['Buy'] * 0,
                       name='Buy',
+                      legendgroup='Candle Stick',
+                      legendrank=5,
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -257,19 +285,24 @@ fig3 = go.Figure(data=data3)
 fig4 = go.Figure(data=data4)
 fig5 = go.Figure(data=data5)
 
-figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
-figs['layout'].update(height=1500, title='PARTICLES CORRELATION')
+figs = cf.subplots([fig1, fig2, fig3, fig5, fig4], shape=(5, 1))
+# figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
+figs['layout'].update(height=1500, title='PARTICLES CORRELATION', legend_tracegroupgap = 180)
+# figs['update_layout'](xaxis_rangeslider_visible=False, xaxis_rangeslider_visible=False)
+# fig5.update(xaxis_rangeslider_visible=False)
+
 
 st.plotly_chart(figs, use_container_width=True)
 
+# -----------------------  HeikenAshi  Matplotlib 시작
 st.set_option('deprecation.showPyplotGlobalUse', False)
 plt.style.use('fivethirtyeight')
 fig = plt.figure(figsize=(30, 15))
 
 mpf.plot(df_heiken,
          volume_panel=2,
-         figratio=(3, 1),
-         figscale=2,
+         figratio=(5, 1),
+         figscale=1,
          style='charles',
          type='candle',
          returnfig=True)
@@ -303,7 +336,7 @@ apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors,
 
 mpf.plot(ohcl_squeeze,
          volume_panel=2,
-         figratio=(3, 1),
+         figratio=(4, 1),
          figscale=1.5,
          style='charles',
          type='candle',

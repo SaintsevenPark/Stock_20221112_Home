@@ -13,6 +13,9 @@ from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
 
 
+# -------------------- 페이지 형태 최기화
+st.set_page_config(page_title=None, page_icon="chart_with_upwards_trend", layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 l_line = 2
 s_line = -10
 stock_count = 300
