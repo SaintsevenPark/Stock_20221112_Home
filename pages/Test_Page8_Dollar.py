@@ -19,8 +19,7 @@ from saintsevenlib import saintsevenstrategy as sst
 st.set_page_config(page_title=None, page_icon="chart_with_upwards_trend", layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 l_line = 2
-s_line = -10
-stock_count = 300
+s_line = -8
 default_strategy = 8
 start_year = '2022'
 
@@ -38,20 +37,10 @@ strategy_names_to_funcs = {
     "Strategy 11": sst.strategy11,
 }
 
-df_stocklist = pd.DataFrame()
-df_stocklistfile = pd.read_csv('stocklist_krx.csv')
-df_stocklist['index'] = df_stocklistfile[0:stock_count].index
-df_stocklist['Code'] = df_stocklistfile[0:stock_count]['Code']
-df_stocklist['Name'] = df_stocklistfile[0:stock_count]['Name']
-df_stocklist['Close'] = df_stocklistfile[0:stock_count]['Close']
-
-st.sidebar.markdown("## KRX")
+st.sidebar.markdown("## 환률")
 selected_strategy = st.sidebar.selectbox("전략 선택", strategy_names_to_funcs.keys(), index=default_strategy)
 
-number = st.sidebar.number_input('Insert a number', min_value=0, max_value=stock_count)
-
-tick_code = df_stocklist['Code'].iloc[number]
-df_origin = fdr.DataReader(tick_code, start=start_year)
+df_origin = fdr.DataReader('USD/KRW', start=start_year)
 df_heiken = ssl.heikin_ashi(df_origin).astype(int)
 df_squeeze = ssl.get_squeeze_momentum(df_origin)
 
@@ -60,21 +49,12 @@ df_squeeze = ssl.get_squeeze_momentum(df_origin)
 #     st.dataframe(df_origin)
 # with st.expander("Heiken Ashi 데이터 프레임"):
 #     st.dataframe(df_heiken)
-with st.expander("Squeeze 데이터 프레임"):
-    st.dataframe(df_squeeze)
+# with st.expander("Squeeze 데이터 프레임"):
+#     st.dataframe(df_squeeze)
 df = ssl.get_indicator(df_origin, l_line, s_line)
 # with st.expander("모든 지표"):
 #     st.dataframe(df)
 
-# -----------------------------------------------------------------------
-
-stock_code = df_stocklist['Code'].iloc[number]
-stock_name = df_stocklist['Name'].iloc[number]
-stock_price = df['Close'].iloc[-1]
-
-st.sidebar.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
-with st.sidebar.expander("주식 목록"):
-    st.dataframe(df_stocklist)
 
 # ====================   전략 선택 매수 마킹 ===========================
 Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
@@ -108,8 +88,6 @@ df_just['STOCHRSId'] = df['STOCHRSId']
 df_just['SMA5'] = df['SMA5']
 df_just['SMA20'] = df['SMA20']
 df_just['SQ_value'] = df['value']
-df_just['squeeze_off'] = df['squeeze_off']
-df_just['squeeze_on'] = df['squeeze_on']
 
 df_just['Buy'] = df['Buy']
 df_just['Sell'] = df['Sell']
@@ -129,34 +107,29 @@ trace1_1 = go.Scatter(x=df_just.index,
 trace1_2 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTl'],
                       name='슈퍼트렌드 l',
-                      legendgroup='종가',
-                      legendrank=1,
+                      legendgroup='종가'
                       )
 trace1_3 = go.Scatter(x=df_origin.index,
                       y=df_just['SUPERTs'],
                       name='슈퍼트렌드 s',
-                      legendgroup='종가',
-                      legendrank=1,
+                      legendgroup='종가'
                       )
 trace1_4 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTlp'],
                       name='슈퍼트렌드 l %',
                       legendgroup='종가',
-                      legendrank=1,
                       line=dict(width=0.5)
                       )
 trace1_5 = go.Scatter(x=df_just.index,
                       y=df_just['SUPERTsp'],
                       name='슈퍼트렌드 s %',
                       legendgroup='종가',
-                      legendrank=1,
                       line=dict(width=0.5)
                       )
 trace1_6 = go.Scatter(x=df_just.index,
                       y=df_just['Buy'],
                       name='Buy',
                       legendgroup='종가',
-                      legendrank=1,
                       mode='markers',
                       marker=dict(
                           color='red',
@@ -171,8 +144,7 @@ trace1_6 = go.Scatter(x=df_just.index,
 trace2_1 = go.Scatter(x=df_just.index,
                       y=df_just['STOCHRSIk'],
                       name='StochasticRSI K',
-                      legendgroup='StochasticRSI K',
-                      legendrank=2,
+                      legendgroup='StochasticRSI K'
                       )
 trace2_2 = go.Scatter(x=df_just.index,
                       y=df_just['STOCHRSId'],
@@ -219,35 +191,26 @@ trace3_3 = go.Scatter(x=df_just.index,
                           ))
                       )
 
-# 4. Squeeze
-colors = []
-
-for ind, val in enumerate(df_just['SQ_value']):
-    if val >= 0:
-        color = 'green'
-        if val > df_just['SQ_value'][ind - 1]:
-            color = 'lime'
-    else:
-        color = 'maroon'
-        if val < df_just['SQ_value'][ind - 1]:
-            color = 'red'
-    colors.append(color)
-
-trace4_1 = go.Bar(x=df_just.index,
-                      y=df_just['SQ_value'],
-                      name='Squeeze',
-                      legendgroup='Squeeze',
-                      legendrank=4,
-                      )
+# 4. Heiken Ashi
+trace4_1 = go.Candlestick(x=df_just.index,
+                          open=df_just['Open_HI'],
+                          high=df_just['High_HI'],
+                          low=df_just['Low_HI'],
+                          close=df_just['Close_HI'],
+                          name='Heiken Ashi',
+                          legendgroup='Heiken Ashi',
+                          legendrank=4,
+                          increasing_line_color='red',
+                          decreasing_line_color='green',
+                          )
 trace4_2 = go.Scatter(x=df_just.index,
-                      y=(df_just['Buy'] * 0) + df_just['SQ_value'],
+                      y=df_just['Buy'] * 1.05,
                       name='Buy',
-                      legendgroup='Squeeze',
+                      legendgroup='Heiken Ashi',
                       legendrank=4,
                       mode='markers',
                       marker=dict(
                           color='red',
-                          # symbol="diamond",
                           size=10,
                           line=dict(
                               color='MediumPurple',
@@ -255,40 +218,17 @@ trace4_2 = go.Scatter(x=df_just.index,
                           ))
                       )
 
-trace4_3 = go.Scatter(x=df_just.index,
-                      y=df_just['Close'] * 0,
-                      name='Buy',
-                      legendgroup='Squeeze',
-                      legendrank=4,
-                      mode='markers',
-                      marker=dict(
-                          color='yellow',
-                          symbol="diamond",
-                          size=3,
-                          line=dict(
-                              color=['blue' if s else 'red' for s in df_just['squeeze_off']],
-                              width=2
-                          ))
+# 5. Squeeze
+trace5_1 = go.Bar(x=df_just.index,
+                      y=df_just['SQ_value'],
+                      name='Candle Stick',
+                      legendgroup='Candle Stick',
+                      legendrank=5
                       )
-# color=['green' if s else 'red' for s in df_squeeze['squeeze_off']]
-
-
-# 5. Heiken Ashi
-trace5_1 = go.Candlestick(x=df_just.index,
-                          open=df_just['Open_HI'],
-                          high=df_just['High_HI'],
-                          low=df_just['Low_HI'],
-                          close=df_just['Close_HI'],
-                          name='Heiken Ashi',
-                          legendgroup='Heiken Ashi',
-                          legendrank=5,
-                          increasing_line_color='red',
-                          decreasing_line_color='green',
-                          )
 trace5_2 = go.Scatter(x=df_just.index,
-                      y=df_just['Buy'] * 1.05,
+                      y=df_just['Buy'] * 0,
                       name='Buy',
-                      legendgroup='Heiken Ashi',
+                      legendgroup='Candle Stick',
                       legendrank=5,
                       mode='markers',
                       marker=dict(
@@ -299,13 +239,24 @@ trace5_2 = go.Scatter(x=df_just.index,
                               width=3
                           ))
                       )
-
+# trace5_3 = go.Scatter(x=df_just.index,
+#                       y=df_just['Buy'] * 1.05,
+#                       name='Buy',
+#                       mode='markers',
+#                       marker=dict(
+#                           color='red',
+#                           size=10,
+#                           line=dict(
+#                               color='MediumPurple',
+#                               width=3
+#                           ))
+#                       )
 
 
 data1 = [trace1_1, trace1_2, trace1_3, trace1_4, trace1_5, trace1_6]
 data2 = [trace2_1, trace2_2, trace2_3]
 data3 = [trace3_1, trace3_2, trace3_3]
-data4 = [trace4_1, trace4_2, trace4_3]
+data4 = [trace4_1, trace4_2]
 data5 = [trace5_1, trace5_2]
 
 fig1 = go.Figure(data=data1)
@@ -314,7 +265,7 @@ fig3 = go.Figure(data=data3)
 fig4 = go.Figure(data=data4)
 fig5 = go.Figure(data=data5)
 
-figs = cf.subplots([fig1, fig2, fig3, fig4, fig5], shape=(5, 1))
+figs = cf.subplots([fig1, fig2, fig3, fig5, fig4], shape=(5, 1))
 # figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
 figs['layout'].update(height=1500, title='PARTICLES CORRELATION', legend_tracegroupgap = 180)
 # figs['update_layout'](xaxis_rangeslider_visible=False, xaxis_rangeslider_visible=False)
