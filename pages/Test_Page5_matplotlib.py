@@ -20,7 +20,7 @@ l_line = 2
 s_line = -10
 stock_count = 300
 default_strategy = 8
-start_year = '2022'
+start_year = '2021'
 
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,

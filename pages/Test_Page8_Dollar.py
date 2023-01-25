@@ -88,6 +88,8 @@ df_just['STOCHRSId'] = df['STOCHRSId']
 df_just['SMA5'] = df['SMA5']
 df_just['SMA20'] = df['SMA20']
 df_just['SQ_value'] = df['value']
+df_just['squeeze_off'] = df['squeeze_off']
+df_just['squeeze_on'] = df['squeeze_on']
 
 df_just['Buy'] = df['Buy']
 df_just['Sell'] = df['Sell']
@@ -219,9 +221,22 @@ trace4_2 = go.Scatter(x=df_just.index,
                       )
 
 # 5. Squeeze
+colors = []
+
+for ind, val in enumerate(df_just['SQ_value']):
+    if val >= 0:
+        color = 'green'
+        if val > df_just['SQ_value'][ind - 1]:
+            color = 'lime'
+    else:
+        color = 'maroon'
+        if val < df_just['SQ_value'][ind - 1]:
+            color = 'red'
+    colors.append(color)
 trace5_1 = go.Bar(x=df_just.index,
                       y=df_just['SQ_value'],
                       name='Candle Stick',
+                  marker=dict(color=colors),
                       legendgroup='Candle Stick',
                       legendrank=5
                       )
@@ -266,10 +281,8 @@ fig4 = go.Figure(data=data4)
 fig5 = go.Figure(data=data5)
 
 figs = cf.subplots([fig1, fig2, fig3, fig5, fig4], shape=(5, 1))
-# figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
 figs['layout'].update(height=1500, title='PARTICLES CORRELATION', legend_tracegroupgap = 180)
-# figs['update_layout'](xaxis_rangeslider_visible=False, xaxis_rangeslider_visible=False)
-# fig5.update(xaxis_rangeslider_visible=False)
+figs['layout'].update(xaxis5=dict(rangeslider=dict(visible=False)))
 
 
 st.plotly_chart(figs, use_container_width=True)

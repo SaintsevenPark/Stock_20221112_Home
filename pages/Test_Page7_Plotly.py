@@ -20,9 +20,9 @@ st.set_page_config(page_title=None, page_icon="chart_with_upwards_trend", layout
 
 l_line = 2
 s_line = -10
-stock_count = 300
+stock_count = 500
 default_strategy = 8
-start_year = '2022'
+start_year = '2021'
 
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
@@ -76,6 +76,12 @@ st.sidebar.markdown(f"### [{stock_code}] {stock_name} : {stock_price}")
 with st.sidebar.expander("주식 목록"):
     st.dataframe(df_stocklist)
 
+# 주식종목 검색 텍스트박스
+stock_name_search = st.sidebar.text_input('주식 인덱스 검색', "주식명 입력")
+stocksearch_index = df_stocklist[df_stocklist['Name'].str.contains(stock_name_search, case=False)]
+st.sidebar.write("주식 번호 : ", stocksearch_index)
+
+
 # ====================   전략 선택 매수 마킹 ===========================
 Buy, Sell, superBuy, superSell, desc = strategy_names_to_funcs[selected_strategy](df)
 st.write(desc)
@@ -110,6 +116,7 @@ df_just['SMA20'] = df['SMA20']
 df_just['SQ_value'] = df['value']
 df_just['squeeze_off'] = df['squeeze_off']
 df_just['squeeze_on'] = df['squeeze_on']
+df_just['EMA200'] = df['EMA200']
 
 df_just['Buy'] = df['Buy']
 df_just['Sell'] = df['Sell']
@@ -165,6 +172,12 @@ trace1_6 = go.Scatter(x=df_just.index,
                               color='MediumPurple',
                               width=3
                           ))
+                      )
+trace1_7 = go.Scatter(x=df_just.index,
+                      y=df_just['EMA200'],
+                      name='EMA200',
+                      legendgroup='종가',
+                      legendrank=1,
                       )
 
 # 2 - Stochastic
@@ -236,6 +249,7 @@ for ind, val in enumerate(df_just['SQ_value']):
 trace4_1 = go.Bar(x=df_just.index,
                       y=df_just['SQ_value'],
                       name='Squeeze',
+                  marker=dict(color=colors),
                       legendgroup='Squeeze',
                       legendrank=4,
                       )
@@ -302,7 +316,7 @@ trace5_2 = go.Scatter(x=df_just.index,
 
 
 
-data1 = [trace1_1, trace1_2, trace1_3, trace1_4, trace1_5, trace1_6]
+data1 = [trace1_1, trace1_2, trace1_3, trace1_4, trace1_5, trace1_6, trace1_7]
 data2 = [trace2_1, trace2_2, trace2_3]
 data3 = [trace3_1, trace3_2, trace3_3]
 data4 = [trace4_1, trace4_2, trace4_3]
@@ -317,6 +331,7 @@ fig5 = go.Figure(data=data5)
 figs = cf.subplots([fig1, fig2, fig3, fig4, fig5], shape=(5, 1))
 # figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
 figs['layout'].update(height=1500, title='PARTICLES CORRELATION', legend_tracegroupgap = 180)
+figs['layout'].update(xaxis5=dict(rangeslider=dict(visible=False)))
 # figs['update_layout'](xaxis_rangeslider_visible=False, xaxis_rangeslider_visible=False)
 # fig5.update(xaxis_rangeslider_visible=False)
 
@@ -361,6 +376,7 @@ fig = plt.figure(figsize=(30, 15))
 apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
         mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
                          color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False),
+        mpf.make_addplot(df_squeeze['EMA200'], panel=0, type='line', secondary_y=False),
         ]
 
 mpf.plot(ohcl_squeeze,
