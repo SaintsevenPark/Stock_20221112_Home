@@ -41,6 +41,7 @@ strategy_names_to_funcs = {
     "Strategy 9": sst.strategy09,
     "Strategy 10": sst.strategy10,
     "Strategy 11": sst.strategy11,
+    "Strategy 12": sst.strategy12,
 }
 
 df_stocklist_nasdaq = pd.read_csv('stocklist_nasdaq.csv')[0:stock_length]

@@ -148,8 +148,8 @@ df_just['EMA200'] = df_all['EMA200']
 
 df_just['Buy'] = df_all['Buy']
 df_just['Sell'] = df_all['Sell']
-with st.expander("필요한 지표만"):
-    st.dataframe(df_just)
+# with st.expander("필요한 지표만"):
+#     st.dataframe(df_just)
 
 # *****************************************************************************
 # ================================  시각화 시작 =================================
@@ -360,7 +360,8 @@ fig5 = go.Figure(data=data5)
 
 figs = cf.subplots([fig1, fig2, fig3, fig4, fig5], shape=(5, 1))
 # figs = cf.subplots([fig1, fig2, fig3], shape=(3, 1))
-figs['layout'].update(height=1500, title='PARTICLES CORRELATION', legend_tracegroupgap = 180)
+screen_height = 1000
+figs['layout'].update(height=screen_height, title='PARTICLES CORRELATION', legend_tracegroupgap = screen_height/10)
 figs['layout'].update(xaxis5=dict(rangeslider=dict(visible=False)))
 # figs['update_layout'](xaxis_rangeslider_visible=False, xaxis_rangeslider_visible=False)
 # fig5.update(xaxis_rangeslider_visible=False)
@@ -368,57 +369,57 @@ figs['layout'].update(xaxis5=dict(rangeslider=dict(visible=False)))
 
 st.plotly_chart(figs, use_container_width=True)
 
-# -----------------------  HeikenAshi  Matplotlib 시작
-st.set_option('deprecation.showPyplotGlobalUse', False)
-plt.style.use('fivethirtyeight')
-fig = plt.figure(figsize=(30, 15))
-
-mpf.plot(df_heiken,
-         volume_panel=2,
-         figratio=(5, 1),
-         figscale=1,
-         style='charles',
-         type='candle',
-         returnfig=True)
-
-st.pyplot()
-
-# -----------------------  Squeeze Momentum  Matplotlib 시작
-ohcl_squeeze = df_squeeze[['Open', 'High', 'Close', 'Low']]
-
-colors = []
-
-for ind, val in enumerate(df_squeeze['value']):
-    if val >= 0:
-        color = 'green'
-        if val > df_squeeze['value'][ind - 1]:
-            color = 'lime'
-    else:
-        color = 'maroon'
-        if val < df_squeeze['value'][ind - 1]:
-            color = 'red'
-    colors.append(color)
-
-st.set_option('deprecation.showPyplotGlobalUse', False)
-plt.style.use('fivethirtyeight')
-fig = plt.figure(figsize=(30, 15))
-
-apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
-        mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
-                         color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False),
-        mpf.make_addplot(df_squeeze['EMA200'], panel=0, type='line', secondary_y=False),
-        mpf.make_addplot(df_all['BBL'], panel=0, type='line', secondary_y=False),
-        mpf.make_addplot(df_all['BBM'], panel=0, type='line', secondary_y=False),
-        mpf.make_addplot(df_all['BBU'], panel=0, type='line', secondary_y=False),
-        ]
-
-mpf.plot(ohcl_squeeze,
-         volume_panel=2,
-         figratio=(4, 1.5),
-         figscale=3.5,
-         style='charles',
-         type='candle',
-         addplot=apds,
-         returnfig=True)
-
-st.pyplot()
+# # -----------------------  HeikenAshi  Matplotlib 시작
+# st.set_option('deprecation.showPyplotGlobalUse', False)
+# plt.style.use('fivethirtyeight')
+# fig = plt.figure(figsize=(30, 15))
+#
+# mpf.plot(df_heiken,
+#          volume_panel=2,
+#          figratio=(5, 1),
+#          figscale=1,
+#          style='charles',
+#          type='candle',
+#          returnfig=True)
+#
+# st.pyplot()
+#
+# # -----------------------  Squeeze Momentum  Matplotlib 시작
+# ohcl_squeeze = df_squeeze[['Open', 'High', 'Close', 'Low']]
+#
+# colors = []
+#
+# for ind, val in enumerate(df_squeeze['value']):
+#     if val >= 0:
+#         color = 'green'
+#         if val > df_squeeze['value'][ind - 1]:
+#             color = 'lime'
+#     else:
+#         color = 'maroon'
+#         if val < df_squeeze['value'][ind - 1]:
+#             color = 'red'
+#     colors.append(color)
+#
+# st.set_option('deprecation.showPyplotGlobalUse', False)
+# plt.style.use('fivethirtyeight')
+# fig = plt.figure(figsize=(30, 15))
+#
+# apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors, alpha=0.5, secondary_y=False),
+#         mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
+#                          color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False),
+#         mpf.make_addplot(df_squeeze['EMA200'], panel=0, type='line', secondary_y=False),
+#         mpf.make_addplot(df_all['BBL'], panel=0, type='line', secondary_y=False),
+#         mpf.make_addplot(df_all['BBM'], panel=0, type='line', secondary_y=False),
+#         mpf.make_addplot(df_all['BBU'], panel=0, type='line', secondary_y=False),
+#         ]
+#
+# mpf.plot(ohcl_squeeze,
+#          volume_panel=2,
+#          figratio=(4, 1.5),
+#          figscale=3.5,
+#          style='charles',
+#          type='candle',
+#          addplot=apds,
+#          returnfig=True)
+#
+# st.pyplot()
