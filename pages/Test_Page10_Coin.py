@@ -1,14 +1,9 @@
 import pandas as pd
 import streamlit as st
 # from streamlit.components.v1 import html
-import matplotlib.pyplot as plt
-import time
 import numpy as np
-import pandas_ta as pt
-import mplfinance as mpf
 import pyupbit
 
-from plotly.subplots import make_subplots
 import cufflinks as cf
 import plotly.graph_objs as go
 

@@ -1,24 +1,16 @@
-import pandas as pd
-import configparser
 import streamlit as st
 import FinanceDataReader as fdr
 import matplotlib.pyplot as plt
 # import time
 import numpy as np
-import cufflinks as cf
 # # # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
 # import plotly.offline as plyo
 # import plotly.graph_objects as go
 # from plotly.subplots import make_subplots
 # import pandas_ta as pt
-from st_aggrid import AgGrid, GridUpdateMode
-from st_aggrid.grid_options_builder import GridOptionsBuilder
-from plotly.subplots import make_subplots
-import pandas_ta as pt
 #
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
-
 
 # --------------------- 설정 파일 작성
 # config = configparser.ConfigParser()

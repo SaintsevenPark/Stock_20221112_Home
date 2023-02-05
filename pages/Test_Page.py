@@ -1,18 +1,12 @@
-import pandas as pd
 import streamlit as st
 import FinanceDataReader as fdr
-import time
-import numpy as np
 import pandas as pd
-import plotly.offline as plyo
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
 
 #
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
-
 
 # -------------------- 페이지 형태 최기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)

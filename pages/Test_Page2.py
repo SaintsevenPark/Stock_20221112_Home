@@ -1,4 +1,3 @@
-import pandas as pd
 import streamlit as st
 import FinanceDataReader as fdr
 import pandas as pd
@@ -7,7 +6,6 @@ import matplotlib.pyplot as plt
 #
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
-
 
 # -------------------- 페이지 형태 최기화
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)

@@ -3,22 +3,12 @@ import pandas as pd
 import pyupbit
 import streamlit as st
 import FinanceDataReader as fdr
-import matplotlib.pyplot as plt
 import time
-from datetime import date, timedelta
-import numpy as np
-import cufflinks as cf
+
 # # https://lumiamitie.github.io/python/cufflinks_basic/ Cufflinks 참조
 # # import plotly.offline as plyo
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import pandas_ta as pt
-from st_aggrid import AgGrid, GridUpdateMode
-from st_aggrid.grid_options_builder import GridOptionsBuilder
 
-sys.path.append('E:/MyProject/PyCharm_Project/StockProject01/StockDashboard01/saintsevenlib')
-from saintsevenlib import saintsevenlib as ssl
-from saintsevenlib import saintsevenstrategy as sst
+sys.path.append('/StockDashboard01/pages/saintsevenlib')
 
 start_date = '2022-11'
 

@@ -10,10 +10,7 @@ import FinanceDataReader as fdr
 # import plotly.graph_objects as go
 # from plotly.subplots import make_subplots
 # import pandas_ta as pt
-from st_aggrid import AgGrid, GridUpdateMode
-from st_aggrid.grid_options_builder import GridOptionsBuilder
 
-from plotly.subplots import make_subplots
 #
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst

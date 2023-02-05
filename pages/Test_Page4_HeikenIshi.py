@@ -1,20 +1,12 @@
 import streamlit as st
 import pandas as pd
 import FinanceDataReader as fdr
-import cufflinks as cf
-import numpy as np
-import pandas_ta as pt
-from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 import mplfinance as mpf
-from mpl_finance import candlestick_ohlc
 import numpy as np
-import matplotlib.dates as mpl_dates
-
 
 from saintsevenlib import saintsevenlib as ssl
 from saintsevenlib import saintsevenstrategy as sst
-
 
 # **************************** 변수 초기화
 l_line = 2
