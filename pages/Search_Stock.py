@@ -28,7 +28,7 @@ l_line = 2
 s_line = -10
 stock_length = 300
 start_date = '2022'
-default_strategy = 8
+default_strategy = 11
 strategy_names_to_funcs = {
     "Strategy 1": sst.strategy01,
     "Strategy 2": sst.strategy02,

@@ -21,7 +21,7 @@ st.set_page_config(page_title=None, page_icon="chart_with_upwards_trend", layout
 l_line = 2
 s_line = -10
 stock_count = 500
-default_strategy = 8
+default_strategy = 11
 start_year = '2021'
 
 strategy_names_to_funcs = {
@@ -378,11 +378,14 @@ apds = [mpf.make_addplot(df_squeeze['value'], panel=1, type='bar', color=colors,
         mpf.make_addplot([0] * len(df_squeeze), panel=1, type='scatter', marker='x', markersize=80,
                          color=['green' if s else 'red' for s in df_squeeze['squeeze_off']], secondary_y=False),
         mpf.make_addplot(df_squeeze['EMA200'], panel=0, type='line', secondary_y=False),
+        mpf.make_addplot(df_squeeze['MACD'], panel=2, type='line', secondary_y=False),
+        mpf.make_addplot(df_squeeze['MACDs'], panel=2, type='line', secondary_y=False),
+        mpf.make_addplot(df_squeeze['MACDh'], panel=2, type='bar', secondary_y=False),
         ]
 
 mpf.plot(ohcl_squeeze,
          volume_panel=2,
-         figratio=(4, 1),
+         figratio=(3, 1),
          figscale=1.5,
          style='charles',
          type='candle',

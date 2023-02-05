@@ -145,7 +145,7 @@ def get_squeeze_momentum(df):
     m1 = (highest + lowest) / 2
     df['value'] = (df['Close'] - (m1 + m_avg) / 2)
     fit_y = np.array(range(0, length_KC))
-    df['value'] = df['value'].rolling(window=length_KC).apply(lambda x: np.polyfit(fit_y, x, 1)[0] * (length_KC - 1) +
+    df['SQ_value'] = df['value'].rolling(window=length_KC).apply(lambda x: np.polyfit(fit_y, x, 1)[0] * (length_KC - 1) +
                      np.polyfit(fit_y, x, 1)[1], raw=True)
 
     # check for 'squeeze'
