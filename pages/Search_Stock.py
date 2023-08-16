@@ -111,7 +111,6 @@ with tab1:
         df_boughtStock_file.to_csv(f".\\bought data\\nasdaq_{now}_{selected_strategy}.csv")
 
 
-
 # ------------------------------------ KRX --------------------------------------------
 with tab2:
     buy_stock_num = []
